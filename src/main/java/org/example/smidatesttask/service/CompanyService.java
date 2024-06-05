@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * service for working with the logic of the company model
@@ -68,5 +69,16 @@ public class CompanyService {
         }
 
         return companyRepository.save(companyToUpdate);
+    }
+
+    /**
+     * delete entity from db function
+     *
+     * @param id - entity id
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public void delete(UUID id) {
+        companyRepository.deleteById(id);
     }
 }
