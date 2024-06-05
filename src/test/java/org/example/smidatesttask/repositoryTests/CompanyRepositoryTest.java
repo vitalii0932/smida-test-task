@@ -62,6 +62,7 @@ public class CompanyRepositoryTest {
     @Test
     public void company_whenSaved_thenCanBeFoundById() {
         Company savedCompany = companyRepository.findById(testCompany.getId()).orElse(null);
+
         assertNotNull(savedCompany);
         assertEquals(testCompany, savedCompany);
     }
@@ -86,6 +87,7 @@ public class CompanyRepositoryTest {
     @Test
     public void company_whenDeleted_thenCannotBeFoundById() {
         companyRepository.delete(testCompany);
+
         assertFalse(companyRepository.findById(testCompany.getId()).isPresent());
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,6 +85,7 @@ public class ReportRepositoryTest {
     @Test
     public void report_whenSaved_thenCanBeFoundById() {
         Report savedReport = reportRepository.findById(testReport.getId()).orElse(null);
+
         assertNotNull(savedReport);
         assertEquals(testReport, savedReport);
     }
@@ -108,6 +110,19 @@ public class ReportRepositoryTest {
     @Test
     public void report_whenDeleted_thenCannotBeFoundById() {
         reportRepository.delete(testReport);
+
         assertFalse(reportRepository.findById(testReport.getId()).isPresent());
+    }
+
+    /**
+     * getAllByCompany function test
+     */
+    @Test
+    public void report_getAllByCompany_thenOneReportInResultList() {
+        List<Report> reports = reportRepository.getAllByCompany(testCompany);
+
+        assertNotNull(reports);
+        assertEquals(1, reports.size());
+        assertEquals(testReport.getId(), reports.get(0).getId());
     }
 }
