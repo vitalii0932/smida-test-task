@@ -13,5 +13,11 @@ import java.util.UUID;
  */
 @Repository
 public interface ReportRepository extends JpaRepository<Report, UUID> {
-
+    /**
+     * get all reports by some company
+     *
+     * @param company - selected company
+     * @return a list of reports
+     */
+    List<Report> getAllByCompany(Company company);
 }
