@@ -2,7 +2,9 @@ package org.example.smidatesttask.repositoryTests;
 
 import org.example.smidatesttask.models.Company;
 import org.example.smidatesttask.models.Report;
+import org.example.smidatesttask.models.Report;
 import org.example.smidatesttask.repository.CompanyRepository;
+import org.example.smidatesttask.repository.ReportRepository;
 import org.example.smidatesttask.repository.ReportRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -21,7 +23,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * CompanyRepository tests
+ * ReportRepository tests
  */
 @DataJpaTest
 @ActiveProfiles("test")
@@ -75,4 +77,16 @@ public class ReportRepositoryTest {
             companyRepository.delete(testCompany);
         }
     }
+
+    /**
+     * create test
+     */
+    @Test
+    public void report_whenSaved_thenCanBeFoundById() {
+        Report savedReport = reportRepository.findById(testReport.getId()).orElse(null);
+        assertNotNull(savedReport);
+        assertEquals(testReport, savedReport);
+    }
+
+
 }
