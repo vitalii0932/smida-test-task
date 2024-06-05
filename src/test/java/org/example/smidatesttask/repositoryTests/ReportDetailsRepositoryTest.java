@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
@@ -68,8 +69,8 @@ public class ReportDetailsRepositoryTest {
         // set up the test report
         testReport = new Report();
         testReport.setReportDate(Timestamp.from(Instant.now()));
-        testReport.setTotalRevenue(1.0);
-        testReport.setNetProfit(1.0);
+        testReport.setTotalRevenue(BigDecimal.ONE);
+        testReport.setNetProfit(BigDecimal.ONE);
         testReport.setCompany(testCompany);
 
         testReport = reportRepository.save(testReport);

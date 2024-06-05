@@ -1,5 +1,7 @@
 package org.example.smidatesttask.serviceTests;
 
+import org.example.smidatesttask.dto.CompanyDTO;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.example.smidatesttask.service.CompanyService;
@@ -35,19 +37,18 @@ public class CompanyServiceTest {
     private CompanyRepository companyRepository;
 
     private Company testCompany;
+    private CompanyDTO testCompanyDTO;
 
     /**
      * set up the test company
      */
     @Before
     public void setUp() {
-        testCompany = new Company();
-        testCompany.setAddress("test address");
-        testCompany.setName("test name");
-        testCompany.setRegistrationNumber("0123456789");
-        testCompany.setCreatedAt(Timestamp.from(Instant.now()));
-
-        testCompany = companyRepository.save(testCompany);
+        testCompanyDTO = new CompanyDTO();
+        testCompanyDTO.setAddress("test address");
+        testCompanyDTO.setName("test name");
+        testCompanyDTO.setRegistrationNumber("0123456789");
+        testCompanyDTO.setCreatedAt(Timestamp.from(Instant.now()));
     }
 
     /**
@@ -55,7 +56,7 @@ public class CompanyServiceTest {
      */
     @After
     public void tearDown() {
-        if (companyRepository.findById(testCompany.getId()).isPresent()) {
+        if (testCompany != null && testCompany.getId() != null && companyRepository.findById(testCompany.getId()).isPresent()) {
             companyRepository.delete(testCompany);
         }
     }
@@ -64,10 +65,42 @@ public class CompanyServiceTest {
      * getAll function test
      */
     @Test
-    public void company_getAll_thenListSizeMustBeNotEmpty() {
+    public void getAll_thenListSizeMustBeNotEmpty() {
         List<Company> companies = companyService.getAll();
 
         assertNotNull(companies);
         assertFalse(companies.isEmpty());
+    }
+
+    /**
+     * save the valid company if company is invalid
+     */
+    @Test
+    public void validCompany_whenSaved_thenCanBeFoundById() throws ValidationException {
+        testCompany = companyService.save(testCompanyDTO);
+
+        Company savedCompany = companyRepository.findById(testCompany.getId()).orElse(null);
+
+        assertNotNull(savedCompany);
+        assertEquals(testCompany, savedCompany);
+    }
+
+    /**
+     * save the invalid company
+     *
+     * @throws ValidationException if company is invalid
+     */
+    @Test
+    public void invalidCompany_whenTryToSave_thenAssertValidationException() throws ValidationException {
+        testCompanyDTO.setName(""); // set invalid value
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            companyService.save(testCompanyDTO);
+        });
+
+        String actualMessage = exception.getViolations().toString();
+
+        assertTrue(actualMessage.contains("property=name"));
+        assertTrue(actualMessage.contains("message=Company name is required"));
     }
 }
