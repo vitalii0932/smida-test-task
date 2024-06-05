@@ -102,5 +102,12 @@ public class ReportRepositoryTest {
         assertEquals(2.0, updatedReport.get().getTotalRevenue(), 0.0001);
     }
 
-
+    /**
+     * delete test
+     */
+    @Test
+    public void report_whenDeleted_thenCannotBeFoundById() {
+        reportRepository.delete(testReport);
+        assertFalse(reportRepository.findById(testReport.getId()).isPresent());
+    }
 }
