@@ -14,9 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * CompanyRepository tests
@@ -65,4 +65,20 @@ public class CompanyRepositoryTest {
         assertNotNull(savedCompany);
         assertEquals(testCompany, savedCompany);
     }
+
+    /**
+     * update test
+     */
+    @Test
+    public void company_whenUpdated_thenCanBeFoundById() {
+        testCompany.setName("updated name");
+        companyRepository.save(testCompany);
+
+        Optional<Company> updatedCompany = companyRepository.findById(testCompany.getId());
+
+        assertTrue(updatedCompany.isPresent());
+        assertEquals("updated name", updatedCompany.get().getName());
+    }
+
+
 }
