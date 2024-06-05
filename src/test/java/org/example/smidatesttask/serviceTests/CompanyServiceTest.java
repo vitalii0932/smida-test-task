@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,7 +58,7 @@ public class CompanyServiceTest {
      */
     @After
     public void tearDown() {
-        if (testCompany != null && testCompany.getId() != null && companyRepository.findById(testCompany.getId()).isPresent()) {
+        if (testCompany != null && testCompany.getId() != null && companyRepository.existsById(testCompany.getId())) {
             companyRepository.deleteById(testCompany.getId());
         }
     }
@@ -153,5 +154,35 @@ public class CompanyServiceTest {
 
         assertTrue(actualMessage.contains("property=name"));
         assertTrue(actualMessage.contains("message=Company address is required"));
+    }
+
+    /**
+     * delete existing company test
+     */
+    @Test
+    public void existingCompany_whenDeleted_thenCannotBeFoundById() {
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        companyService.delete(testCompany.getId());
+
+        assertFalse(companyRepository.existsById(testCompany.getId()));
+    }
+
+    /**
+     * delete non-existent company test
+     */
+    @Test
+    public void nonexistentCompany_whenTryToDelete_thenAssertException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            companyService.delete(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company with this id not found");
     }
 }

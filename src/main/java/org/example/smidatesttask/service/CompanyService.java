@@ -97,10 +97,14 @@ public class CompanyService {
      * delete entity from db function
      *
      * @param id - entity id
+     * @throws RuntimeException if company not found
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public void delete(UUID id) {
+    public void delete(UUID id) throws RuntimeException {
+        companyRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Company with this id not found")
+        );
         companyRepository.deleteById(id);
     }
 }
