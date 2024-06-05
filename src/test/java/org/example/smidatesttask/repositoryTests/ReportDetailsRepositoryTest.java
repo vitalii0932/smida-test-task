@@ -1,6 +1,7 @@
 package org.example.smidatesttask.repositoryTests;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.smidatesttask.models.Company;
 import org.example.smidatesttask.models.Report;
 import org.example.smidatesttask.models.ReportDetails;
@@ -13,7 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -26,11 +27,14 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * ReportDetailsRepository tests
  */
-@DataJpaTest
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @RunWith(SpringRunner.class)
 public class ReportDetailsRepositoryTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private ReportDetailsRepository reportDetailsRepository;
@@ -74,7 +78,14 @@ public class ReportDetailsRepositoryTest {
         testReportDetails = new ReportDetails();
         testReportDetails.setReportId(testReport.getId());
         testReportDetails.setComments("test comments");
-        testReportDetails.setFinancialData(new JSONPObject("test json", "test json"));
+
+        String testJsonString = "{\"nick\": \"cowtowncoder\"}";
+        try {
+            JsonNode testJsonNode = objectMapper.readTree(testJsonString);
+            testReportDetails.setFinancialData(testJsonNode.asText());
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
 
         testReportDetails = reportDetailsRepository.save(testReportDetails);
     }
@@ -93,5 +104,41 @@ public class ReportDetailsRepositoryTest {
         if (companyRepository.findById(testCompany.getId()).isPresent()) {
             companyRepository.delete(testCompany);
         }
+    }
+
+    /**
+     * create test
+     */
+    @Test
+    public void reportDetails_whenSaved_thenCanBeFoundById() {
+        ReportDetails savedReportDetails = reportDetailsRepository.findById(testReportDetails.getReportId()).orElse(null);
+
+        assertNotNull(savedReportDetails);
+        assertEquals(testReportDetails, savedReportDetails);
+    }
+
+    /**
+     * update test
+     */
+    @Test
+    public void reportDetails_whenUpdated_thenCanBeFoundById() {
+        testReportDetails.setComments("new comments");
+
+        reportDetailsRepository.save(testReportDetails);
+
+        Optional<ReportDetails> updatedReportDetails = reportDetailsRepository.findById(testReportDetails.getReportId());
+
+        assertTrue(updatedReportDetails.isPresent());
+        assertEquals("new comments", updatedReportDetails.get().getComments());
+    }
+
+    /**
+     * delete test
+     */
+    @Test
+    public void reportDetails_whenDeleted_thenCannotBeFoundById() {
+        reportDetailsRepository.delete(testReportDetails);
+
+        assertFalse(reportDetailsRepository.findById(testReportDetails.getReportId()).isPresent());
     }
 }

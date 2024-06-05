@@ -1,6 +1,5 @@
 package org.example.smidatesttask.models;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,6 +16,6 @@ public class ReportDetails {
     @Id
     private UUID reportId;
     @Field("financial_data")
-    private JSONPObject financialData;
+    private String financialData;
     private String comments;
 }
