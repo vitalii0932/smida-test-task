@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,6 +25,16 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+
+    /**
+     * get all companies
+     *
+     * @return a list of companies
+     */
+    @Transactional(readOnly = true)
+    public List<Company> getAll() {
+        return companyRepository.findAll();
+    }
 
     /**
      * save company in db function
