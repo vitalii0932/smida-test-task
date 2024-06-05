@@ -1,5 +1,6 @@
 package org.example.smidatesttask.serviceTests;
 
+import lombok.SneakyThrows;
 import org.example.smidatesttask.dto.CompanyDTO;
 import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.model.Company;
@@ -57,7 +58,7 @@ public class CompanyServiceTest {
     @After
     public void tearDown() {
         if (testCompany != null && testCompany.getId() != null && companyRepository.findById(testCompany.getId()).isPresent()) {
-            companyRepository.delete(testCompany);
+            companyRepository.deleteById(testCompany.getId());
         }
     }
 
@@ -73,11 +74,15 @@ public class CompanyServiceTest {
     }
 
     /**
-     * save the valid company if company is invalid
+     * save the valid company test
      */
     @Test
-    public void validCompany_whenSaved_thenCanBeFoundById() throws ValidationException {
-        testCompany = companyService.save(testCompanyDTO);
+    public void validCompany_whenSaved_thenCanBeFoundById() {
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
 
         Company savedCompany = companyRepository.findById(testCompany.getId()).orElse(null);
 
@@ -86,12 +91,10 @@ public class CompanyServiceTest {
     }
 
     /**
-     * save the invalid company
-     *
-     * @throws ValidationException if company is invalid
+     * save the invalid company test
      */
     @Test
-    public void invalidCompany_whenTryToSave_thenAssertValidationException() throws ValidationException {
+    public void invalidCompany_whenTryToSave_thenAssertValidationException() {
         testCompanyDTO.setName(""); // set invalid value
 
         ValidationException exception = assertThrows(ValidationException.class, () -> {
@@ -102,5 +105,53 @@ public class CompanyServiceTest {
 
         assertTrue(actualMessage.contains("property=name"));
         assertTrue(actualMessage.contains("message=Company name is required"));
+    }
+
+    /**
+     * update the valid company test
+     */
+    @Test
+    public void validCompany_whenUpdated_thenCanBeFoundById() {
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testCompanyDTO.setId(testCompany.getId());
+        testCompanyDTO.setName("new test company name");
+
+        Company updatedCompany;
+        try {
+            updatedCompany = companyService.update(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(updatedCompany.getName(), testCompanyDTO.getName());
+    }
+
+    /**
+     * update the invalid company test
+     */
+    @Test
+    public void invalidCompany_whenTryToUpdate_thenAssertValidationException() {
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testCompanyDTO.setId(testCompany.getId());
+        testCompanyDTO.setAddress(""); // set invalid value
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+            companyService.save(testCompanyDTO);
+        });
+
+        String actualMessage = exception.getViolations().toString();
+
+        assertTrue(actualMessage.contains("property=name"));
+        assertTrue(actualMessage.contains("message=Company address is required"));
     }
 }

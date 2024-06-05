@@ -52,6 +52,8 @@ public class CompanyService {
 
         validationService.isValid(companyToSave);
 
+        companyRepository.save(companyToSave);
+
         return companyToSave;
     }
 
