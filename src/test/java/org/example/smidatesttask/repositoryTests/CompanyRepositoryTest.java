@@ -80,5 +80,12 @@ public class CompanyRepositoryTest {
         assertEquals("updated name", updatedCompany.get().getName());
     }
 
-
+    /**
+     * delete test
+     */
+    @Test
+    public void company_whenDeleted_thenCannotBeFoundById() {
+        companyRepository.delete(testCompany);
+        assertFalse(companyRepository.findById(testCompany.getId()).isPresent());
+    }
 }
