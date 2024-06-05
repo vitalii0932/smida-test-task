@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
 import java.util.UUID;
 import java.sql.Timestamp;
 
@@ -18,8 +20,11 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @NotBlank(message = "Company name is required")
     private String name;
+    @NotBlank(message = "Company registration number is required")
     private String registrationNumber;
+    @NotBlank(message = "Company address is required")
     private String address;
     private Timestamp createdAt;
 }

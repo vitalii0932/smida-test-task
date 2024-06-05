@@ -47,7 +47,7 @@ public class CompanyService {
     public Company save(CompanyDTO companyDTO) {
         var companyToSave = companyMapper.toCompany(companyDTO);
         companyToSave.setCreatedAt(Timestamp.from(Instant.now()));
-        return companyRepository.save(companyMapper.toCompany(companyDTO));
+        return companyToSave;
     }
 
     /**
