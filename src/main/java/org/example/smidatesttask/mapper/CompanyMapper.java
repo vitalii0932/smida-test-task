@@ -1,7 +1,7 @@
 package org.example.smidatesttask.mapper;
 
 import org.example.smidatesttask.dto.CompanyDTO;
-import org.example.smidatesttask.models.Company;
+import org.example.smidatesttask.model.Company;
 import org.mapstruct.Mapper;
 
 /**

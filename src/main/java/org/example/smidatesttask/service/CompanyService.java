@@ -3,7 +3,7 @@ package org.example.smidatesttask.service;
 import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.CompanyDTO;
 import org.example.smidatesttask.mapper.CompanyMapper;
-import org.example.smidatesttask.models.Company;
+import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;

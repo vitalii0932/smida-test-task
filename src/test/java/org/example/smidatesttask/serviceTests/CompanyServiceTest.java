@@ -1,7 +1,6 @@
 package org.example.smidatesttask.serviceTests;
 
-import org.example.smidatesttask.dto.CompanyDTO;
-import org.example.smidatesttask.models.Company;
+import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.example.smidatesttask.service.CompanyService;
 import org.junit.After;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;

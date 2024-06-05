@@ -1,7 +1,7 @@
 package org.example.smidatesttask.repository;
 
-import org.example.smidatesttask.models.Company;
-import org.example.smidatesttask.models.Report;
+import org.example.smidatesttask.model.Company;
+import org.example.smidatesttask.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

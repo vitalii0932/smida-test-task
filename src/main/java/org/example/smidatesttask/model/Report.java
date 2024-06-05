@@ -1,4 +1,4 @@
-package org.example.smidatesttask.models;
+package org.example.smidatesttask.model;
 
 import lombok.Data;
 

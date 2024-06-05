@@ -2,7 +2,7 @@ package org.example.smidatesttask.mapper;
 
 import javax.annotation.processing.Generated;
 import org.example.smidatesttask.dto.CompanyDTO;
-import org.example.smidatesttask.models.Company;
+import org.example.smidatesttask.model.Company;
 import org.springframework.stereotype.Component;
 
 @Generated(

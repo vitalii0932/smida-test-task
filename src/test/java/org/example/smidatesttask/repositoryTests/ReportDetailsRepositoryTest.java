@@ -2,9 +2,9 @@ package org.example.smidatesttask.repositoryTests;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.smidatesttask.models.Company;
-import org.example.smidatesttask.models.Report;
-import org.example.smidatesttask.models.ReportDetails;
+import org.example.smidatesttask.model.Company;
+import org.example.smidatesttask.model.Report;
+import org.example.smidatesttask.model.ReportDetails;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.example.smidatesttask.repository.ReportDetailsRepository;
 import org.example.smidatesttask.repository.ReportRepository;
