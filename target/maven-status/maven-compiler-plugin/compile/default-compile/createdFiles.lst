@@ -1,0 +1,7 @@
+org\example\smidatesttask\repository\ReportRepository.class
+org\example\smidatesttask\SmidaTestTaskApplication.class
+org\example\smidatesttask\models\Report.class
+org\example\smidatesttask\repository\ReportDetailsRepository.class
+org\example\smidatesttask\models\Company.class
+org\example\smidatesttask\models\ReportDetails.class
+org\example\smidatesttask\repository\CompanyRepository.class

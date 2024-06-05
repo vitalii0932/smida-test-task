@@ -1,13 +1,10 @@
 package org.example.smidatesttask.models;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.util.UUID;
 
 /**
@@ -17,9 +14,8 @@ import java.util.UUID;
 @Document(collection = "reportDetails")
 public class ReportDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID reportId;
     @Field("financial_data")
-    private JSONPObject financialData;
+    private String financialData;
     private String comments;
 }
