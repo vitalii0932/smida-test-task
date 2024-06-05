@@ -2,6 +2,7 @@ package org.example.smidatesttask.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.CompanyDTO;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.mapper.CompanyMapper;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.repository.CompanyRepository;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CompanyService {
 
+    private final ValidationService validationService;
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
 
@@ -44,9 +46,12 @@ public class CompanyService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public Company save(CompanyDTO companyDTO) {
+    public Company save(CompanyDTO companyDTO) throws ValidationException {
         var companyToSave = companyMapper.toCompany(companyDTO);
         companyToSave.setCreatedAt(Timestamp.from(Instant.now()));
+
+        validationService.isValid(companyToSave);
+
         return companyToSave;
     }
 
@@ -58,15 +63,19 @@ public class CompanyService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public Company update(CompanyDTO companyDTO) throws RuntimeException, IllegalAccessException {
+    public Company update(CompanyDTO companyDTO) throws RuntimeException, IllegalAccessException, ValidationException {
+        Company companyNewData = companyMapper.toCompany(companyDTO);
+
+        validationService.isValid(companyNewData);
+
         Company companyToUpdate = companyRepository.findById(companyDTO.getId()).orElseThrow(
                 () -> new RuntimeException("Company with this id now found")
         );
 
-        Field[] fields = companyDTO.getClass().getDeclaredFields();
+        Field[] fields = companyNewData.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
-            Object value = field.get(companyDTO);
+            Object value = field.get(companyNewData);
             if (value != null && !field.getName().equals("createdAt")) {
                 Field companyField;
                 try {
