@@ -88,5 +88,19 @@ public class ReportRepositoryTest {
         assertEquals(testReport, savedReport);
     }
 
+    /**
+     * update test
+     */
+    @Test
+    public void report_whenUpdated_thenCanBeFoundById() {
+        testReport.setTotalRevenue(2.0);
+        reportRepository.save(testReport);
+
+        Optional<Report> updatedReport = reportRepository.findById(testReport.getId());
+
+        assertTrue(updatedReport.isPresent());
+        assertEquals(2.0, updatedReport.get().getTotalRevenue(), 0.0001);
+    }
+
 
 }
