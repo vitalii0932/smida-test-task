@@ -1,6 +1,7 @@
 package org.example.smidatesttask.serviceTests;
 
 import org.example.smidatesttask.dto.ReportDetailsDTO;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.mapper.ReportDetailsMapper;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
@@ -270,5 +271,35 @@ public class ReportDetailsServiceTest {
         String actualMessage = exception.getMessage();
 
         assertEquals(actualMessage, "This string isn't json");
+    }
+
+    /**
+     * delete the existing report details test
+     */
+    @Test
+    public void existingReportDetails_whenDeleted_thenCannotBeFoundById() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        reportDetailsService.delete(testReportDetails.getReportId());
+
+        assertFalse(reportDetailsRepository.existsById(testReportDetails.getReportId()));
+    }
+
+    /**
+     * delete the non-existent report details test
+     */
+    @Test
+    public void nonexistentReport_whenTryToDelete_thenAssertRuntimeException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.delete(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report details with this id not found");
     }
 }
