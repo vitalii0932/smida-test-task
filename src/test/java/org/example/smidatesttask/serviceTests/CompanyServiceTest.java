@@ -67,6 +67,12 @@ public class CompanyServiceTest {
      */
     @Test
     public void getAll_thenListSizeMustBeNotEmpty() {
+        try {
+            companyService.save(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         List<Company> companies = companyService.getAll();
 
         assertNotNull(companies);
@@ -98,6 +104,40 @@ public class CompanyServiceTest {
     public void nonexistentCompany_whenTryToFind_thenAssertRuntimeException() {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             companyService.findCompanyById(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company with this id not found");
+    }
+
+    /**
+     * find the existing company dto test
+     */
+    @Test
+    public void existingCompany_whenTtyToFindDTO_returnCompanyDTO() {
+        CompanyDTO findedCompanyDTO;
+
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+
+            testCompanyDTO.setId(testCompany.getId());
+
+            findedCompanyDTO = companyService.findCompanyDTOById(testCompany.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(testCompanyDTO, findedCompanyDTO);
+    }
+
+    /**
+     * find the non-existent company dto test
+     */
+    @Test
+    public void nonexistentCompany_whenTryToFindDTO_thenAssertRuntimeException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            companyService.findCompanyDTOById(UUID.randomUUID());
         });
 
         String actualMessage = exception.getMessage();
@@ -203,7 +243,6 @@ public class CompanyServiceTest {
         } catch (Exception e) {
             throw new RuntimeException();
         }
-
 
         assertFalse(companyRepository.existsById(testCompany.getId()));
     }
