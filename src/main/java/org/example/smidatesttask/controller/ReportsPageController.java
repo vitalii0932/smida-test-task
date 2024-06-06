@@ -26,7 +26,6 @@ public class ReportsPageController {
 
     private final ReportService reportService;
     private final CompanyService companyService;
-    private final ReportMapper reportMapper;
 
     /**
      * handles the GET request for the company reports page
@@ -38,7 +37,7 @@ public class ReportsPageController {
     @GetMapping("/{companyId}")
     public String loadReportsPage(Model model, @PathVariable("companyId") UUID companyId) {
         List<Report> reports = reportService.getAllReportByCompany(companyId);
-        model.addAttribute("company", reports.get(0).getCompany());
+        model.addAttribute("company", companyService.findCompanyById(companyId));
         model.addAttribute("reports", reports);
         return "reports";
     }

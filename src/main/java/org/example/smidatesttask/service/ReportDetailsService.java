@@ -41,6 +41,18 @@ public class ReportDetailsService {
     }
 
     /**
+     * get report details dto function
+     *
+     * @param reportId - report id
+     * @return the report dto details
+     * @throws RuntimeException if report was not found
+     */
+    @Transactional(readOnly = true)
+    public ReportDetailsDTO getReportDetailsDTO(UUID reportId) throws RuntimeException {
+        return reportDetailsMapper.toReportDetailsDTO(getReportDetails(reportId));
+    }
+
+    /**
      * save report details in db
      *
      * @param reportDetailsDTO - report details data from user

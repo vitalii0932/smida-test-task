@@ -1,50 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Create Report Details</title>
-		<link rel="stylesheet" href="/static/style.css" />
-	</head>
-	<body class="form_body">
-		<button onclick="logout()" class="logout_button">Logout</button>
-		<div class="form_div">
-			<h1>
-				<a href="reports_details.html" class="go_back">Go back</a> or
-				Create/Update Report Details
-			</h1>
-			<form>
-				<p id="error_message"></p>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Create Report Details</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body class="form_body">
+<button onclick="logout()" class="logout_button">Logout</button>
+<div class="form_div">
+    <h1>
+        <a th:href="@{'/api/v1/reports_details/' + ${reportDetails.reportId}}" class="go_back">Go back</a> or
+        <span th:if="${reportDetails.reportId} != null">Update</span>
+        <span th:unless="${reportDetails.reportId} != null">Create</span>
+        Report
+    </h1>
+    <form th:object="${reportDetails}" th:action="@{/api/v1/reports_details/submit_report}" method="post">
+        <p id="error_message"></p>
 
-				<label for="reportId">Report Id:</label>
-				<input
-					type="text"
-					id="reportId"
-					name="reportId"
-					style="pointer-events: none"
-				/>
+        <label for="reportId">Report Id:</label>
+        <input type="text" id="reportId" name="reportId" style="pointer-events: none" th:field="*{reportId}"/>
 
-				<label for="financialData">Financial Data:</label>
-				<input type="text" id="financialData" name="financialData" required />
+        <label for="financialData">Financial Data (JSON):</label>
+        <textarea id="financialData" name="financialData" style="height: 300px" required th:field="*{financialData}"></textarea>
 
-				<label for="financialData">Financial Data (JSON):</label>
-				<textarea
-					id="financialData"
-					name="financialData"
-					style="height: 300px"
-					required
-				></textarea>
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" style="height: 100px" required th:field="*{comments}"></textarea>
 
-				<label for="comments">Comments:</label>
-				<textarea
-					id="comments"
-					name="comments"
-					style="height: 100px"
-					required
-				></textarea>
-
-				<input type="submit" value="Create" />
-			</form>
-		</div>
-	</body>
+        <input type="submit" value="Create"/>
+    </form>
+</div>
+</body>
 </html>
