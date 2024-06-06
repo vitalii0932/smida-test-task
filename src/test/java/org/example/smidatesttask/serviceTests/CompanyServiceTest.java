@@ -1,6 +1,5 @@
 package org.example.smidatesttask.serviceTests;
 
-import lombok.SneakyThrows;
 import org.example.smidatesttask.dto.CompanyDTO;
 import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.model.Company;
