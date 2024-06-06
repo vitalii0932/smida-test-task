@@ -61,6 +61,18 @@ public class CompanyService {
     }
 
     /**
+     * find company dto by its id
+     *
+     * @param id - company id
+     * @return a company
+     * @throws RuntimeException if company was not found
+     */
+    @Transactional(readOnly = true)
+    public CompanyDTO findCompanyDTOById(UUID id) throws RuntimeException {
+        return companyMapper.toCompanyDTO(findCompanyById(id));
+    }
+
+    /**
      * create or update company function
      *
      * @param companyDTO - company data from user

@@ -56,9 +56,7 @@ public class CompaniesPageController {
      */
     @GetMapping("/update/{companyId}")
     public String loadUpdateCompanyPage(Model model, @PathVariable("companyId") UUID companyId) {
-        model.addAttribute("company", companyMapper.toCompanyDTO(
-                companyService.findCompanyById(companyId)
-        ));
+        model.addAttribute("company", companyService.findCompanyDTOById(companyId));
         return "create_or_update_company";
     }
 }

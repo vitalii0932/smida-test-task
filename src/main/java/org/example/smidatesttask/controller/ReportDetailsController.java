@@ -1,7 +1,6 @@
 package org.example.smidatesttask.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.smidatesttask.dto.ReportDTO;
 import org.example.smidatesttask.dto.ReportDetailsDTO;
 import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.model.ReportDetails;
@@ -29,7 +28,7 @@ public class ReportDetailsController {
     /**
      * handles the GET request for the report details page
      *
-     * @param model - the model object used to pass data to the view
+     * @param model    - the model object used to pass data to the view
      * @param reportId - report id
      * @return the view name for the report details page
      */
