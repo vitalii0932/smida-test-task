@@ -7,6 +7,7 @@ import org.example.smidatesttask.mapper.ReportMapper;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.repository.CompanyRepository;
+import org.example.smidatesttask.repository.ReportDetailsRepository;
 import org.example.smidatesttask.repository.ReportRepository;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class ReportService {
     private final ValidationService validationService;
     private final CompanyService companyService;
     private final ReportRepository reportRepository;
+    private final ReportDetailsRepository reportDetailsRepository;
     private final ReportMapper reportMapper;
 
     /**
@@ -54,9 +56,8 @@ public class ReportService {
      */
     @Transactional
     public ReportDTO findReportDTOById(UUID id) throws RuntimeException {
-        ReportDTO reportDTO = new ReportDTO();
         Report report = findReportById(id);
-        reportDTO = reportMapper.toReportDTO(report);
+        ReportDTO reportDTO = reportMapper.toReportDTO(report);
         reportDTO.setCompanyId(report.getCompany().getId());
         return reportDTO;
     }
@@ -73,6 +74,23 @@ public class ReportService {
         return reportRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Report with this id not found")
         );
+    }
+
+    /**
+     * create or update report
+     *
+     * @param reportDTO - report data from user
+     * @return a saved report
+     * @throws Exception if something wrong
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public Report createOrUpdateReport(ReportDTO reportDTO) throws Exception {
+        if (reportDTO.getId() == null) {
+            return save(reportDTO);
+        } else {
+            return update(reportDTO);
+        }
     }
 
     /**
@@ -145,6 +163,12 @@ public class ReportService {
     @Retryable(maxAttempts = 5)
     public void delete(UUID id) throws RuntimeException {
         findReportById(id);
+
+        try {
+            reportDetailsRepository.deleteById(id);
+        } catch (Exception e) {
+            // skip
+        }
         reportRepository.deleteById(id);
     }
 }

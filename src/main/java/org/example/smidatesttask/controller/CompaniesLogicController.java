@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.CompanyDTO;
 import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.service.CompanyService;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -48,14 +47,14 @@ public class CompaniesLogicController {
     }
 
     /**
-     * delete category function
+     * delete company function
      *
      * @param companyId - company id
      * @param redirectAttributes - attributes to redirect
      * @return a page
      */
     @GetMapping("/delete/{companyId}")
-    public String deleteCategory(@PathVariable("companyId") UUID companyId, RedirectAttributes redirectAttributes) {
+    public String deleteCompany(@PathVariable("companyId") UUID companyId, RedirectAttributes redirectAttributes) {
         try {
             companyService.delete(companyId);
         } catch (Exception e) {

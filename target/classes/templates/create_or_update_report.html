@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Create Report</title>
-		<link rel="stylesheet" th:href="@{/style.css}"/>
-	</head>
-	<body class="form_body">
-		<button onclick="logout()" class="logout_button">Logout</button>
-		<div class="form_div">
-			<h1>
-				<a th:href="@{'/api/v1/reports/' + ${companyId}}" class="go_back">Go back</a> or
-				<span th:if="${report.getId()} != null">Update</span>
-				<span th:unless="${report.getId()} != null">Create</span>
-				Report
-			</h1>
-			<form th:object="${report}" th:action="@{/api/v1/reports/submit_report}" method="post">
-				<p id="error_message"></p>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Create Report</title>
+	<link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body class="form_body">
+	<button onclick="logout()" class="logout_button">Logout</button>
+	<div class="form_div">
+		<h1>
+			<a th:href="@{'/api/v1/reports/' + ${companyId}}" class="go_back">Go back</a> or
+			<span th:if="${report.getId()} != null">Update</span>
+			<span th:unless="${report.getId()} != null">Create</span>
+			Report
+		</h1>
+		<form th:object="${report}" th:action="@{/api/v1/reports/submit_report}" method="post">
+			<p th:if="${error}" id="error_message" th:text="${error}"></p>
 
-				<label for="id">Id:</label>
-				<input type="text" id="id" name="id" style="pointer-events: none" th:field="*{id}" />
+			<label for="id">Id:</label>
+			<input type="text" id="id" name="id" style="pointer-events: none" th:field="*{id}" />
 
-				<label for="companyId">Company:</label>
-				<input type="text" id="companyId" name="companyId" style="pointer-events: none" th:field="*{companyId}" />
+			<label for="companyId">Company:</label>
+			<input type="text" id="companyId" name="companyId" style="pointer-events: none" th:field="*{companyId}" />
 
-				<label for="totalRevenue">Total Revenue:</label>
-				<input type="number" id="totalRevenue" name="totalRevenue" th:field="*{totalRevenue}" required />
+			<label for="totalRevenue">Total Revenue:</label>
+			<input type="number" id="totalRevenue" name="totalRevenue" th:field="*{totalRevenue}" required />
 
-				<label for="netProfit">Net Profit:</label>
-				<input type="number" id="netProfit" name="netProfit" th:field="*{netProfit}" required />
+			<label for="netProfit">Net Profit:</label>
+			<input type="number" id="netProfit" name="netProfit" th:field="*{netProfit}" required />
 
-				<input type="submit" value="Create" />
-			</form>
-		</div>
-	</body>
+			<input type="submit" value="Create" />
+		</form>
+	</div>
+</body>
 </html>

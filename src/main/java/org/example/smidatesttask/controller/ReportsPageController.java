@@ -51,6 +51,7 @@ public class ReportsPageController {
     @GetMapping("/create/{companyId}")
     public String loadCreateReportPage(Model model, @PathVariable("companyId") UUID companyId) {
         ReportDTO reportDTO = new ReportDTO();
+        reportDTO.setCompanyId(companyId);
         model.addAttribute("companyId", companyId);
         model.addAttribute("report", reportDTO);
         return "create_or_update_report";

@@ -21,7 +21,7 @@
 				<th>update the report details data</th>
 				<th>delete the report details</th>
 			</tr>
-			<tr>
+			<tr th:if="${reportDetails != null}">
 				<td th:text="${reportDetails.getReportId()}"></td>
 				<td th:text="${reportDetails.getFinancialData()}"></td>
 				<td th:text="${reportDetails.getComments()}"></td>

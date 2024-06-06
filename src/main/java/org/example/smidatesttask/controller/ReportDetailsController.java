@@ -36,7 +36,12 @@ public class ReportDetailsController {
     @GetMapping("/{reportId}")
     public String loadReportDetailsPage(Model model, @PathVariable("reportId") UUID reportId) {
         Report selectedReport = reportService.findReportById(reportId);
-        ReportDetails reportDetails = reportDetailsService.getReportDetails(reportId);
+        ReportDetails reportDetails;
+        try {
+            reportDetails = reportDetailsService.getReportDetails(reportId);
+        } catch (Exception e) {
+            reportDetails = null;
+        }
         model.addAttribute("company", selectedReport.getCompany());
         model.addAttribute("report", selectedReport);
         model.addAttribute("reportDetails", reportDetails);
@@ -51,16 +56,17 @@ public class ReportDetailsController {
      */
     @GetMapping("/create/{reportId}")
     public String loadCreateReportDetailsPage(Model model, @PathVariable("reportId") UUID reportId) {
-        if (reportDetailsService.getReportDetails(reportId) == null) {
+        try {
+            reportDetailsService.getReportDetails(reportId);
+        } catch (Exception e) {
             ReportDetailsDTO reportDetailsDTO = new ReportDetailsDTO();
             reportDetailsDTO.setReportId(reportId);
 
             model.addAttribute("reportDetails", reportDetailsDTO);
 
             return "create_or_update_report_details";
-        } else {
-            return "redirect:/api/v1/reports_details/update/" + reportId;
         }
+        return "redirect:/api/v1/reports_details/update/" + reportId;
     }
 
     /**
