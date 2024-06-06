@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReportDetailsService {
 
+    private final JsonValidationService jsonValidationService;
     private final ReportDetailsRepository reportDetailsRepository;
     private final ReportRepository reportRepository;
     private final ReportDetailsMapper reportDetailsMapper;
