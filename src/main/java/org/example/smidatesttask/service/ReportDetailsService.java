@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 /**
@@ -61,5 +62,41 @@ public class ReportDetailsService {
         ReportDetails reportDetailsToSave = reportDetailsMapper.toReportDetails(reportDetailsDTO);
 
         return reportDetailsRepository.save(reportDetailsToSave);
+    }
+
+    /**
+     * update report details in db
+     *
+     * @param reportDetailsDTO - report details data from user
+     * @return a saved report details
+     * @throws RuntimeException is something was wrong
+     * @throws IllegalAccessException if class arguments not correct
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public ReportDetails update(ReportDetailsDTO reportDetailsDTO) throws RuntimeException, IllegalAccessException {
+        jsonValidationService.isValidJSON(reportDetailsDTO.getFinancialData());
+        
+        ReportDetails reportDetailsNewData = reportDetailsMapper.toReportDetails(reportDetailsDTO);
+        
+        ReportDetails reportDetailsToUpdate = getReportDetails(reportDetailsDTO.getReportId());
+
+        Field[] fields = reportDetailsNewData.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object value = field.get(reportDetailsNewData);
+            if (value != null && !field.getName().equals("createdAt")) {
+                Field reportField;
+                try {
+                    reportField = reportDetailsToUpdate.getClass().getDeclaredField(field.getName());
+                    reportField.setAccessible(true);
+                    reportField.set(reportDetailsToUpdate, value);
+                } catch (NoSuchFieldException e) {
+                    // ignore fields that are not found in the reportDetailsToUpdate object
+                }
+            }
+        }
+
+        return reportDetailsRepository.save(reportDetailsToUpdate);
     }
 }
