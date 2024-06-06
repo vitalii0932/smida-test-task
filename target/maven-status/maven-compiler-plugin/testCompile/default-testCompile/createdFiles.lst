@@ -1,0 +1,8 @@
+org\example\smidatesttask\repositoryTests\CompanyRepositoryTest.class
+org\example\smidatesttask\serviceTests\ReportServiceTest.class
+org\example\smidatesttask\repositoryTests\ReportDetailsRepositoryTest.class
+org\example\smidatesttask\serviceTests\CompanyServiceTest.class
+org\example\smidatesttask\serviceTests\ReportDetailsServiceTest.class
+org\example\smidatesttask\serviceTests\JsonServiceTest.class
+org\example\smidatesttask\repositoryTests\ReportRepositoryTest.class
+org\example\smidatesttask\serviceTests\ValidationServiceTest.class

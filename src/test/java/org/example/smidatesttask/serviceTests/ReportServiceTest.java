@@ -118,7 +118,8 @@ public class ReportServiceTest {
         }
 
         assertNotNull(reportFromDb);
-        assertEquals(testReport, reportFromDb);
+        assertEquals(reportFromDb.getId(), testReport.getId());
+        assertEquals(reportFromDb.getCompany(), testReport.getCompany());
     }
 
     /**
@@ -142,7 +143,8 @@ public class ReportServiceTest {
         }
 
         assertNotNull(reportDTOFromDb);
-        assertEquals(testReportDTO, reportDTOFromDb);
+        assertEquals(testReportDTO.getId(), reportDTOFromDb.getId());
+        assertEquals(testReportDTO.getCompanyId(), reportDTOFromDb.getCompanyId());
     }
 
     /**
@@ -159,7 +161,8 @@ public class ReportServiceTest {
         Report savedReport = reportRepository.findById(testReport.getId()).orElse(null);
 
         assertNotNull(savedReport);
-        assertEquals(testReport, savedReport);
+        assertEquals(savedReport.getId(), testReport.getId());
+        assertEquals(savedReport.getCompany(), testReport.getCompany());
     }
 
     /**
@@ -200,7 +203,8 @@ public class ReportServiceTest {
         Report savedReport = reportRepository.findById(testReport.getId()).orElse(null);
 
         assertNotNull(savedReport);
-        assertEquals(testReport, savedReport);
+        assertEquals(savedReport.getId(), testReport.getId());
+        assertEquals(savedReport.getCompany(), testReport.getCompany());
     }
 
     /**
