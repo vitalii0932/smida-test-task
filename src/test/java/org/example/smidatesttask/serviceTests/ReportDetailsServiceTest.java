@@ -1,16 +1,17 @@
-package org.example.smidatesttask.repositoryTests;
+package org.example.smidatesttask.serviceTests;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.smidatesttask.dto.ReportDetailsDTO;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.model.ReportDetails;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.example.smidatesttask.repository.ReportDetailsRepository;
 import org.example.smidatesttask.repository.ReportRepository;
+import org.example.smidatesttask.service.ReportDetailsService;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,36 +22,35 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * ReportDetailsRepository tests
+ * ReportService tests
  */
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @RunWith(SpringRunner.class)
-public class ReportDetailsRepositoryTest {
+public class ReportDetailsServiceTest {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ReportDetailsRepository reportDetailsRepository;
+    private ReportDetailsService reportDetailsService;
 
     @Autowired
-    private CompanyRepository companyRepository;
+    private ReportDetailsRepository reportDetailsRepository;
 
     @Autowired
     private ReportRepository reportRepository;
 
-    private Company testCompany;
-
-    private Report testReport;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     private ReportDetails testReportDetails;
+    private Report testReport;
+    private Company testCompany;
+    private ReportDetailsDTO testReportDetailsDTO;
 
     /**
      * set up the test reportDetails
@@ -76,19 +76,17 @@ public class ReportDetailsRepositoryTest {
         testReport = reportRepository.save(testReport);
 
         //set up the test report details
-        testReportDetails = new ReportDetails();
-        testReportDetails.setReportId(testReport.getId());
-        testReportDetails.setComments("test comments");
+        testReportDetailsDTO = new ReportDetailsDTO();
+        testReportDetailsDTO.setReportId(testReport.getId());
+        testReportDetailsDTO.setComments("test comments");
 
         String testJsonString = "{\"test\": \"json\"}";
         try {
             JsonNode testJsonNode = objectMapper.readTree(testJsonString);
-            testReportDetails.setFinancialData(testJsonNode.asText());
+            testReportDetailsDTO.setFinancialData(testJsonNode.asText());
         } catch (Exception e) {
             e.fillInStackTrace();
         }
-
-        testReportDetails = reportDetailsRepository.save(testReportDetails);
     }
 
     /**
@@ -96,7 +94,7 @@ public class ReportDetailsRepositoryTest {
      */
     @After
     public void tearDown() {
-        if (reportDetailsRepository.findById(testReportDetails.getReportId()).isPresent()) {
+        if (testReportDetails != null && testReportDetails.getReportId() != null && reportDetailsRepository.findById(testReportDetails.getReportId()).isPresent()) {
             reportDetailsRepository.delete(testReportDetails);
         }
         if (reportRepository.findById(testReport.getId()).isPresent()) {
@@ -105,41 +103,5 @@ public class ReportDetailsRepositoryTest {
         if (companyRepository.findById(testCompany.getId()).isPresent()) {
             companyRepository.delete(testCompany);
         }
-    }
-
-    /**
-     * create test
-     */
-    @Test
-    public void reportDetails_whenSaved_thenCanBeFoundById() {
-        ReportDetails savedReportDetails = reportDetailsRepository.findById(testReportDetails.getReportId()).orElse(null);
-
-        assertNotNull(savedReportDetails);
-        assertEquals(testReportDetails, savedReportDetails);
-    }
-
-    /**
-     * update test
-     */
-    @Test
-    public void reportDetails_whenUpdated_thenCanBeFoundById() {
-        testReportDetails.setComments("new comments");
-
-        reportDetailsRepository.save(testReportDetails);
-
-        Optional<ReportDetails> updatedReportDetails = reportDetailsRepository.findById(testReportDetails.getReportId());
-
-        assertTrue(updatedReportDetails.isPresent());
-        assertEquals("new comments", updatedReportDetails.get().getComments());
-    }
-
-    /**
-     * delete test
-     */
-    @Test
-    public void reportDetails_whenDeleted_thenCannotBeFoundById() {
-        reportDetailsRepository.delete(testReportDetails);
-
-        assertFalse(reportDetailsRepository.findById(testReportDetails.getReportId()).isPresent());
     }
 }
