@@ -147,4 +147,72 @@ public class ReportServiceTest {
 
         assertEquals(actualMessage, "Company with this id not found");
     }
+
+    /**
+     * update the valid report test
+     */
+    @Test
+    public void validReport_whenUpdated_thenCanBeFoundById() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testReportDTO.setId(testReport.getId());
+        testReportDTO.setTotalRevenue(BigDecimal.TEN);
+
+        Report updatedReport;
+        try {
+            updatedReport = reportService.update(testReportDTO);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        assertEquals(updatedReport.getTotalRevenue(), testReportDTO.getTotalRevenue());
+    }
+
+    /**
+     * update the invalid report with null company test
+     */
+    @Test
+    public void invalidReportWithNullCompany_whenTryToUpdate_thenAssertRuntimeException() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testReportDTO.setCompanyId(null);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportService.update(testReportDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company id is required");
+    }
+
+    /**
+     * update the invalid report with non-existing company test
+     */
+    @Test
+    public void invalidReportWithNonExistingCompany_whenTryToUpdate_thenAssertRuntimeException() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testReportDTO.setCompanyId(UUID.randomUUID());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportService.update(testReportDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company with this id not found");
+    }
 }
