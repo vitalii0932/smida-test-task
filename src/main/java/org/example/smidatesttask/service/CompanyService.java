@@ -47,6 +47,9 @@ public class CompanyService {
      */
     @Transactional(readOnly = true)
     public Company findCompanyById(UUID id) throws RuntimeException {
+        if (id == null) {
+            throw new RuntimeException("Company id is required");
+        }
         return companyRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Company with this id not found")
         );

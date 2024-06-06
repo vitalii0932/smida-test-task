@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,10 +70,10 @@ public class ReportServiceTest {
      */
     @After
     public void tearDown() {
-        if (reportRepository.findById(testReport.getId()).isPresent()) {
+        if (testReport != null && testReport.getId() != null && reportRepository.existsById(testReport.getId())) {
             reportRepository.delete(testReport);
         }
-        if (companyRepository.findById(testCompany.getId()).isPresent()) {
+        if (testCompany != null && testCompany.getId() != null && companyRepository.existsById(testCompany.getId())) {
             companyRepository.delete(testCompany);
         }
     }
@@ -96,5 +97,54 @@ public class ReportServiceTest {
         for (Report report : reports) {
             assertEquals(report.getCompany().getId(), testReportDTO.getCompanyId());
         }
+    }
+
+    /**
+     * save the valid report test
+     */
+    @Test
+    public void validReport_whenSaved_thenCanBeFoundById() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        Report savedReport = reportRepository.findById(testReport.getId()).orElse(null);
+
+        assertNotNull(savedReport);
+        assertEquals(testReport, savedReport);
+    }
+
+    /**
+     * save the invalid report with null company test
+     */
+    @Test
+    public void invalidReportWithNullCompany_whenTryToSave_thenAssertRuntimeException() {
+        testReportDTO.setCompanyId(null);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportService.save(testReportDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company id is required");
+    }
+
+    /**
+     * save the invalid report with non-existing company test
+     */
+    @Test
+    public void invalidReportWithNonExistingCompany_whenTryToSave_thenAssertRuntimeException() {
+        testReportDTO.setCompanyId(UUID.randomUUID());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportService.save(testReportDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company with this id not found");
     }
 }

@@ -29,7 +29,6 @@ public class ReportService {
     private final ValidationService validationService;
     private final CompanyService companyService;
     private final ReportRepository reportRepository;
-    private final CompanyRepository companyRepository;
     private final ReportMapper reportMapper;
 
     /**
