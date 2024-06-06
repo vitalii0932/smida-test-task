@@ -53,6 +53,34 @@ public class ReportDetailsService {
     }
 
     /**
+     * check is report details exist in db
+     *
+     * @param reportId - report id
+     * @return true is exist and false if doesn't exist
+     */
+    @Transactional(readOnly = true)
+    public boolean isReportDetailsExistDb(UUID reportId) {
+        return reportDetailsRepository.existsById(reportId);
+    }
+
+    /**
+     * create or update report details function
+     *
+     * @param reportDetailsDTO  - report details data from user
+     * @return a saved report details
+     * @throws Exception is something was wrong
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public ReportDetails createOrUpdateReportDetails(ReportDetailsDTO reportDetailsDTO) throws Exception {
+        if (!isReportDetailsExistDb(reportDetailsDTO.getReportId())) {
+            return save(reportDetailsDTO);
+        } else {
+            return update(reportDetailsDTO);
+        }
+    }
+
+    /**
      * save report details in db
      *
      * @param reportDetailsDTO - report details data from user

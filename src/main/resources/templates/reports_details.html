@@ -13,6 +13,7 @@
 			<a th:href="@{'/api/v1/reports/' + ${company.getId()}}" th:text="${report.getReportDate()}"></a> details in DB:
 		</p>
 		<a th:href="@{'/api/v1/reports_details/create/' + ${report.getId()}}" id="new">Create New</a>
+		<p th:if="${error}" id="error_message" th:text="${error}"></p>
 		<table>
 			<tr>
 				<th>report</th>

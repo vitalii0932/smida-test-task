@@ -15,8 +15,8 @@
         <span th:unless="${reportDetails.reportId} != null">Create</span>
         Report
     </h1>
-    <form th:object="${reportDetails}" th:action="@{/api/v1/reports_details/submit_report}" method="post">
-        <p id="error_message"></p>
+    <form th:object="${reportDetails}" th:action="@{/api/v1/reports_details/submit_report_details}" method="post">
+        <p th:if="${error}" id="error_message" th:text="${error}"></p>
 
         <label for="reportId">Report Id:</label>
         <input type="text" id="reportId" name="reportId" style="pointer-events: none" th:field="*{reportId}"/>

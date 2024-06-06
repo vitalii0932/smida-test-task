@@ -47,7 +47,7 @@ public class ReportsLogicController {
     }
 
     /**
-     * delete category function
+     * delete company function
      *
      * @param reportId - report id
      * @param redirectAttributes - attributes to redirect
