@@ -161,7 +161,7 @@ public class ReportService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public void delete(UUID id) throws RuntimeException {
+    public void delete(UUID id) throws Exception {
         findReportById(id);
 
         try {

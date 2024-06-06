@@ -147,7 +147,7 @@ public class ReportDetailsService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public void delete(UUID id) throws RuntimeException {
+    public void delete(UUID id) throws Exception {
         reportDetailsRepository.delete(getReportDetails(id));
     }
 }
