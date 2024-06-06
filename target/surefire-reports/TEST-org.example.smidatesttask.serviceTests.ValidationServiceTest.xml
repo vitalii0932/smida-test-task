@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="4.38" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.example.smidatesttask.serviceTests.ValidationServiceTest" time="1.742" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -62,7 +62,8 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="reportDetails_whenUpdated_thenCanBeFoundById" classname="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="0.195"/>
-  <testcase name="reportDetails_whenDeleted_thenCannotBeFoundById" classname="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="0.066"/>
-  <testcase name="reportDetails_whenSaved_thenCanBeFoundById" classname="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="0.015"/>
+  <testcase name="validReport_tryToValidate_thenAssertNotThrowsValidationException" classname="org.example.smidatesttask.serviceTests.ValidationServiceTest" time="0.007"/>
+  <testcase name="invalidCompany_tryToValidate_thenAssertThrowsValidationException" classname="org.example.smidatesttask.serviceTests.ValidationServiceTest" time="0.011"/>
+  <testcase name="invalidReport_tryToValidate_thenAssertThrowsValidationException" classname="org.example.smidatesttask.serviceTests.ValidationServiceTest" time="0.005"/>
+  <testcase name="validCompany_tryToValidate_thenAssertNotThrowsValidationException" classname="org.example.smidatesttask.serviceTests.ValidationServiceTest" time="0.003"/>
 </testsuite>

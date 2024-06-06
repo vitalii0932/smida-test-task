@@ -1,10 +1,8 @@
 package org.example.smidatesttask.repositoryTests;
 
-import org.example.smidatesttask.models.Company;
-import org.example.smidatesttask.models.Report;
-import org.example.smidatesttask.models.Report;
+import org.example.smidatesttask.model.Company;
+import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.repository.CompanyRepository;
-import org.example.smidatesttask.repository.ReportRepository;
 import org.example.smidatesttask.repository.ReportRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -59,8 +58,8 @@ public class ReportRepositoryTest {
         // set up the test report
         testReport = new Report();
         testReport.setReportDate(Timestamp.from(Instant.now()));
-        testReport.setTotalRevenue(1.0);
-        testReport.setNetProfit(1.0);
+        testReport.setTotalRevenue(BigDecimal.ONE);
+        testReport.setNetProfit(BigDecimal.ONE);
         testReport.setCompany(testCompany);
 
         testReport = reportRepository.save(testReport);
@@ -95,13 +94,13 @@ public class ReportRepositoryTest {
      */
     @Test
     public void report_whenUpdated_thenCanBeFoundById() {
-        testReport.setTotalRevenue(2.0);
+        testReport.setTotalRevenue(BigDecimal.TEN);
         reportRepository.save(testReport);
 
         Optional<Report> updatedReport = reportRepository.findById(testReport.getId());
 
         assertTrue(updatedReport.isPresent());
-        assertEquals(2.0, updatedReport.get().getTotalRevenue(), 0.0001);
+        assertEquals(BigDecimal.TEN, updatedReport.get().getTotalRevenue());
     }
 
     /**

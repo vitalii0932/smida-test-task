@@ -1,6 +1,6 @@
 package org.example.smidatesttask.repository;
 
-import org.example.smidatesttask.models.ReportDetails;
+import org.example.smidatesttask.model.ReportDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package org.example.smidatesttask.repositoryTests;
 
-import org.example.smidatesttask.models.Company;
+import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.junit.After;
 import org.junit.Before;

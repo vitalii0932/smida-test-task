@@ -2,9 +2,9 @@ package org.example.smidatesttask.repositoryTests;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.smidatesttask.models.Company;
-import org.example.smidatesttask.models.Report;
-import org.example.smidatesttask.models.ReportDetails;
+import org.example.smidatesttask.model.Company;
+import org.example.smidatesttask.model.Report;
+import org.example.smidatesttask.model.ReportDetails;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.example.smidatesttask.repository.ReportDetailsRepository;
 import org.example.smidatesttask.repository.ReportRepository;
@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
@@ -68,8 +69,8 @@ public class ReportDetailsRepositoryTest {
         // set up the test report
         testReport = new Report();
         testReport.setReportDate(Timestamp.from(Instant.now()));
-        testReport.setTotalRevenue(1.0);
-        testReport.setNetProfit(1.0);
+        testReport.setTotalRevenue(BigDecimal.ONE);
+        testReport.setNetProfit(BigDecimal.ONE);
         testReport.setCompany(testCompany);
 
         testReport = reportRepository.save(testReport);
@@ -79,7 +80,7 @@ public class ReportDetailsRepositoryTest {
         testReportDetails.setReportId(testReport.getId());
         testReportDetails.setComments("test comments");
 
-        String testJsonString = "{\"nick\": \"cowtowncoder\"}";
+        String testJsonString = "{\"test\": \"json\"}";
         try {
             JsonNode testJsonNode = objectMapper.readTree(testJsonString);
             testReportDetails.setFinancialData(testJsonNode.asText());
