@@ -8,6 +8,18 @@
 	flex-direction: column;
 	align-items: center;
 }
+.logout_button {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background-color: #c0392b;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+}
 h1 {
 	font-size: 24px;
 	margin-bottom: 20px;
@@ -104,6 +116,8 @@ label {
 	margin-bottom: 8px;
 }
 input[type='text'],
+input[type='email'],
+input[type='password'],
 input[type='number'],
 textarea {
 	width: calc(100% - 20px);
