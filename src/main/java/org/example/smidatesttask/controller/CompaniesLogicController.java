@@ -11,6 +11,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
 
+/**
+ * controller for companies logic
+ */
 @Controller
 @RequestMapping("/api/v1/companies")
 @RequiredArgsConstructor
@@ -18,6 +21,13 @@ public class CompaniesLogicController {
 
     private final CompanyService companyService;
 
+    /**
+     * submit company function
+     *
+     * @param companyDTO - company data from user
+     * @param redirectAttributes - attributes to redirect
+     * @return a page
+     */
     @PostMapping("/submit_company")
     public String submitCompany(@ModelAttribute("company") CompanyDTO companyDTO, RedirectAttributes redirectAttributes) {
         try {
@@ -37,12 +47,18 @@ public class CompaniesLogicController {
         }
     }
 
+    /**
+     * delete category function
+     *
+     * @param companyId - company id
+     * @param redirectAttributes - attributes to redirect
+     * @return a page
+     */
     @GetMapping("/delete/{companyId}")
     public String deleteCategory(@PathVariable("companyId") UUID companyId, RedirectAttributes redirectAttributes) {
         try {
             companyService.delete(companyId);
         } catch (Exception e) {
-            e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
