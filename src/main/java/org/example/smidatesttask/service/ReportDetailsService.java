@@ -84,7 +84,7 @@ public class ReportDetailsService {
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.get(reportDetailsNewData);
-            if (value != null && !field.getName().equals("createdAt")) {
+            if (value != null) {
                 Field reportField;
                 try {
                     reportField = reportDetailsToUpdate.getClass().getDeclaredField(field.getName());

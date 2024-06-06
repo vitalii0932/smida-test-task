@@ -133,4 +133,75 @@ public class ReportDetailsServiceTest {
         assertEquals(actualMessage, "Report details with this id not found");
     }
 
+
+    /**
+     * save the valid report details test
+     */
+    @Test
+    public void validReportDetails_whenSaved_thenCanBeFoundById() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        ReportDetails savedReportDetails = reportDetailsRepository.findById(testReportDetails.getReportId()).orElse(null);
+
+        assertNotNull(savedReportDetails);
+        assertEquals(testReportDetails, savedReportDetails);
+    }
+
+    /**
+     * save the invalid report details with incorrect id test
+     */
+    @Test
+    public void invalidReportDetailsWithIncorrectId_whenTryToSave_thenAssertRuntimeException() {
+        testReportDetailsDTO.setReportId(UUID.randomUUID());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.save(testReportDetailsDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report with this id was not found");
+    }
+
+    /**
+     * save the invalid report details with taken id test
+     */
+    @Test
+    public void invalidReportDetailsWithTakenId_whenTryToSave_thenAssertRuntimeException() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        testReportDetailsDTO.setReportId(testReportDetails.getReportId());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.save(testReportDetailsDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report with this id is already taken");
+    }
+
+    /**
+     * save the invalid report details with not correct financial data test
+     */
+    @Test
+    public void invalidReportDetailsWithNotCorrectFinancialData_whenTryToSave_thenAssertRuntimeException() {
+        testReportDetailsDTO.setFinancialData("incorrect json");
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.save(testReportDetailsDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "This string isn't json");
+    }
 }
