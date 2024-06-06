@@ -1,9 +1,7 @@
 package org.example.smidatesttask.serviceTests;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.smidatesttask.dto.ReportDetailsDTO;
-import org.example.smidatesttask.exception.ValidationException;
+import org.example.smidatesttask.mapper.ReportDetailsMapper;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.model.ReportDetails;
@@ -38,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ReportDetailsServiceTest {
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private ReportDetailsMapper reportDetailsMapper;
 
     @Autowired
     private ReportDetailsService reportDetailsService;
@@ -133,7 +131,6 @@ public class ReportDetailsServiceTest {
         assertEquals(actualMessage, "Report details with this id not found");
     }
 
-
     /**
      * save the valid report details test
      */
@@ -198,6 +195,76 @@ public class ReportDetailsServiceTest {
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             reportDetailsService.save(testReportDetailsDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "This string isn't json");
+    }
+
+    /**
+     * updated the valid report details test
+     */
+    @Test
+    public void validReportDetails_whenUpdated_thenCanBeFoundById() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        testReportDetailsDTO.setReportId(testReportDetails.getReportId());
+        testReportDetailsDTO.setComments("new comment");
+
+        ReportDetails updatedReportDetails;
+        try {
+            updatedReportDetails = reportDetailsService.update(testReportDetailsDTO);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        assertEquals(updatedReportDetails, reportDetailsMapper.toReportDetails(testReportDetailsDTO));
+    }
+
+    /**
+     * update the invalid report details with incorrect id test
+     */
+    @Test
+    public void invalidReportDetailsWithIncorrectId_whenTryToUpdate_thenAssertRuntimeException() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        testReportDetailsDTO.setReportId(UUID.randomUUID());
+        testReportDetailsDTO.setComments("new comment");
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.update(testReportDetailsDTO);
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report details with this id not found");
+    }
+
+    /**
+     * update the invalid report details with not correct financial data test
+     */
+    @Test
+    public void invalidReportDetailsWithNotCorrectFinancialData_whenTryToUpdate_thenAssertRuntimeException() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        testReportDetailsDTO.setReportId(testReportDetails.getReportId());
+        testReportDetailsDTO.setFinancialData("incorrect json");
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.update(testReportDetailsDTO);
         });
 
         String actualMessage = exception.getMessage();
