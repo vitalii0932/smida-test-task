@@ -7,19 +7,20 @@ import org.springframework.stereotype.Service;
  * service for validate json
  */
 @Service
-public class JsonValidationService {
+public class JsonService {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * check does the str is json
+     * parse str to json
      *
      * @param str - str from user
+     * @return - json
      * @throws RuntimeException if str isn't json
      */
-    public void isValidJSON(String str) throws RuntimeException {
+    public String strToJsonNode(String str) throws RuntimeException {
         try {
-            objectMapper.readTree(str);
+            return objectMapper.readTree(str).toString();
         } catch (Exception e) {
             throw new RuntimeException("This string isn't json");
         }

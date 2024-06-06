@@ -3,6 +3,7 @@ package org.example.smidatesttask.serviceTests;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.smidatesttask.dto.ReportDetailsDTO;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.model.ReportDetails;
@@ -12,6 +13,7 @@ import org.example.smidatesttask.repository.ReportRepository;
 import org.example.smidatesttask.service.ReportDetailsService;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -22,6 +24,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * ReportService tests
@@ -79,14 +84,7 @@ public class ReportDetailsServiceTest {
         testReportDetailsDTO = new ReportDetailsDTO();
         testReportDetailsDTO.setReportId(testReport.getId());
         testReportDetailsDTO.setComments("test comments");
-
-        String testJsonString = "{\"test\": \"json\"}";
-        try {
-            JsonNode testJsonNode = objectMapper.readTree(testJsonString);
-            testReportDetailsDTO.setFinancialData(testJsonNode.asText());
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }
+        testReportDetailsDTO.setFinancialData("{\"test\": \"json\"}");
     }
 
     /**
@@ -104,4 +102,35 @@ public class ReportDetailsServiceTest {
             companyRepository.delete(testCompany);
         }
     }
+
+    /**
+     * get report details with correct report id
+     */
+    @Test
+    public void correctReportDetails_getReportDetails_thenReturnCorrectReportDetails() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        assertNotNull(testReportDetails);
+        assertEquals(testReportDetails.getFinancialData(), testReportDetailsDTO.getFinancialData());
+        assertEquals(testReportDetails.getComments(), testReportDetailsDTO.getComments());
+    }
+
+    /**
+     * get report details with incorrect report id
+     */
+    @Test
+    public void incorrectReportDetails_getReportDetails_thenReturnCorrectReportDetails() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.getReportDetails(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report details with this id not found");
+    }
+
 }

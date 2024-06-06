@@ -21,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReportDetailsService {
 
-    private final JsonValidationService jsonValidationService;
+    private final JsonService jsonService;
     private final ReportDetailsRepository reportDetailsRepository;
     private final ReportRepository reportRepository;
     private final ReportDetailsMapper reportDetailsMapper;
@@ -57,7 +57,7 @@ public class ReportDetailsService {
             throw new RuntimeException("Report with this id is already taken");
         }
 
-        jsonValidationService.isValidJSON(reportDetailsDTO.getFinancialData());
+        reportDetailsDTO.setFinancialData(jsonService.strToJsonNode(reportDetailsDTO.getFinancialData()));
 
         ReportDetails reportDetailsToSave = reportDetailsMapper.toReportDetails(reportDetailsDTO);
 
@@ -75,8 +75,7 @@ public class ReportDetailsService {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
     public ReportDetails update(ReportDetailsDTO reportDetailsDTO) throws RuntimeException, IllegalAccessException {
-        jsonValidationService.isValidJSON(reportDetailsDTO.getFinancialData());
-        
+        reportDetailsDTO.setFinancialData(jsonService.strToJsonNode(reportDetailsDTO.getFinancialData()));
         ReportDetails reportDetailsNewData = reportDetailsMapper.toReportDetails(reportDetailsDTO);
         
         ReportDetails reportDetailsToUpdate = getReportDetails(reportDetailsDTO.getReportId());
