@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Reports</title>
-		<link rel="stylesheet" href="/static/style.css" />
-	</head>
-	<body class="table_body">
-		<button onclick="logout()" class="logout_button">Logout</button>
-		<p><a href="companies.html">{Company name}</a> reports in DB:</p>
-		<a href="#" id="new">Create New</a>
-		<table>
-			<tr>
-				<th>id</th>
-				<th>company</th>
-				<th>report date</th>
-				<th>total revenue</th>
-				<th>net profit</th>
-				<th>view the report details</th>
-				<th>update the report data</th>
-				<th>delete the report</th>
-			</tr>
-			<tr>
-				<td>Data 1</td>
-				<td>Data 2</td>
-				<td>Data 3</td>
-				<td>Data 4</td>
-				<td>Data 5</td>
-				<td><a href="reports_details.html">details</a></td>
-				<td><a href="create_or_update_report.html">update</a></td>
-				<td><a href="#" id="delete">delete</a></td>
-			</tr>
-		</table>
-	</body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Reports</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body class="table_body">
+<button onclick="logout()" class="logout_button">Logout</button>
+<p><a th:href="@{/api/v1/companies}"><span th:text="${companyName}"></span></a> reports in DB:</p>
+<a href="#" id="new">Create New</a>
+<table>
+    <tr>
+        <th>id</th>
+        <th>company</th>
+        <th>report date</th>
+        <th>total revenue</th>
+        <th>net profit</th>
+        <th>view the report details</th>
+        <th>update the report data</th>
+        <th>delete the report</th>
+    </tr>
+    <tr th:each="report : ${reports}">
+        <td th:text="${report.getId()}"></td>
+        <td th:text="${report.getCompany().getName()}"></td>
+        <td th:text="${report.getReportDate()}"></td>
+        <td th:text="${report.getTotalRevenue()}"></td>
+        <td th:text="${report.getNetProfit()}"></td>
+        <td><a th:href="@{'/api/v1/reports_details/' + ${report.getId()}}">details</a></td>
+        <td><a th:href="@{'/api/v1/reports_details/update/' + ${report.getId()}}">update</a></td>
+        <td><a th:href="@{'/api/v1/reports_details/delete/' + ${report.getId()}}" id="delete">delete</a></td>
+    </tr>
+</table>
+</body>
 </html>
