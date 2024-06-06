@@ -5,7 +5,10 @@ import org.example.smidatesttask.dto.CompanyDTO;
 import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.mapper.CompanyMapper;
 import org.example.smidatesttask.model.Company;
+import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.repository.CompanyRepository;
+import org.example.smidatesttask.repository.ReportDetailsRepository;
+import org.example.smidatesttask.repository.ReportRepository;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -26,6 +29,8 @@ public class CompanyService {
 
     private final ValidationService validationService;
     private final CompanyRepository companyRepository;
+    private final ReportRepository reportRepository;
+    private final ReportDetailsRepository reportDetailsRepository;
     private final CompanyMapper companyMapper;
 
     /**
@@ -137,8 +142,19 @@ public class CompanyService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public void delete(UUID id) throws RuntimeException {
-        findCompanyById(id);
+    public void delete(UUID id) throws Exception {
+        Company company = findCompanyById(id);
+        List<Report> reportsToDelete = reportRepository.getAllByCompany(company);
+
+        for (var report : reportsToDelete) {
+            try {
+                reportDetailsRepository.deleteById(report.getId());
+                reportRepository.delete(report);
+            } catch (Exception e) {
+                // skip
+            }
+        }
+
         companyRepository.deleteById(id);
     }
 }

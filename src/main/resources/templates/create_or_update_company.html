@@ -16,7 +16,7 @@
         Company
     </h1>
     <form th:object="${company}" th:action="@{/api/v1/companies/submit_company}" method="post">
-        <p id="error_message"></p>
+        <p th:if="${error}" id="error_message" th:text="${error}"></p>
 
         <label for="id">Id:</label>
         <input type="text" id="id" name="id" style="pointer-events: none" th:field="*{id}"/>

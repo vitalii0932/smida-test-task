@@ -198,7 +198,12 @@ public class CompanyServiceTest {
             throw new RuntimeException(e);
         }
 
-        companyService.delete(testCompany.getId());
+        try {
+            companyService.delete(testCompany.getId());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
 
         assertFalse(companyRepository.existsById(testCompany.getId()));
     }

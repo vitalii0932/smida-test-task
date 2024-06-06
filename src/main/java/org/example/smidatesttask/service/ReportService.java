@@ -58,7 +58,6 @@ public class ReportService {
         Report report = findReportById(id);
         reportDTO = reportMapper.toReportDTO(report);
         reportDTO.setCompanyId(report.getCompany().getId());
-
         return reportDTO;
     }
 
