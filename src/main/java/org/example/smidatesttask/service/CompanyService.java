@@ -56,10 +56,28 @@ public class CompanyService {
     }
 
     /**
+     * create or update company function
+     *
+     * @param companyDTO - company data from user
+     * @return the saved company
+     * @throws Exception if something was wrong
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public Company createOrUpdateCompany(CompanyDTO companyDTO) throws Exception {
+        if (companyDTO.getId() == null) {
+            return save(companyDTO);
+        } else {
+            return update(companyDTO);
+        }
+    }
+
+    /**
      * save company in db function
      *
      * @param companyDTO - company data from user
      * @return the saved company
+     * @throws ValidationException if company is not valid
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
