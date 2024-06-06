@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Companies</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body class="table_body">
+		<button onclick="logout()" class="logout_button">Logout</button>
+		<p>Companies in DB:</p>
+		<a href="create_or_update_company.html" id="new">Create New</a>
+		<table>
+			<tr>
+				<th>id</th>
+				<th>name</th>
+				<th>registration number</th>
+				<th>address</th>
+				<th>created at</th>
+				<th>view the report</th>
+				<th>update the company data</th>
+				<th>delete the company</th>
+			</tr>
+			<tr>
+				<td>Data 1</td>
+				<td>Data 2</td>
+				<td>Data 3</td>
+				<td>Data 4</td>
+				<td>Data 5</td>
+				<td><a href="reports.html">report</a></td>
+				<td><a href="create_or_update_company.html">update</a></td>
+				<td><a href="#" id="delete">delete</a></td>
+			</tr>
+		</table>
+	</body>
+</html>
