@@ -39,6 +39,20 @@ public class CompanyService {
     }
 
     /**
+     * find company by its id
+     *
+     * @param id - company id
+     * @return a company
+     * @throws RuntimeException if company was not found
+     */
+    @Transactional(readOnly = true)
+    public Company findCompanyById(UUID id) throws RuntimeException {
+        return companyRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Company with this id not found")
+        );
+    }
+
+    /**
      * save company in db function
      *
      * @param companyDTO - company data from user
@@ -70,9 +84,7 @@ public class CompanyService {
 
         validationService.isValid(companyNewData);
 
-        Company companyToUpdate = companyRepository.findById(companyDTO.getId()).orElseThrow(
-                () -> new RuntimeException("Company with this id now found")
-        );
+        Company companyToUpdate = findCompanyById(companyDTO.getId());
 
         Field[] fields = companyNewData.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -102,9 +114,7 @@ public class CompanyService {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
     public void delete(UUID id) throws RuntimeException {
-        companyRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Company with this id not found")
-        );
+        findCompanyById(id);
         companyRepository.deleteById(id);
     }
 }

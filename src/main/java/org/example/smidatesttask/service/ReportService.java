@@ -1,12 +1,16 @@
 package org.example.smidatesttask.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.smidatesttask.dto.ReportDTO;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.mapper.ReportMapper;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.repository.CompanyRepository;
 import org.example.smidatesttask.repository.ReportRepository;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,5 +42,17 @@ public class ReportService {
         );
 
         return reportRepository.getAllByCompany(selectedCompany);
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public Report save(ReportDTO reportDTO) throws RuntimeException, ValidationException {
+        Report reportToSave = reportMapper.toReport(reportDTO);
+
+        Company reportCompany = companyRepository.findById(reportDTO.getCompanyId()).orElseThrow(
+                () -> new RuntimeException("The company with this id doesn't exist in the db")
+        );
+
+        return null;
     }
 }

@@ -74,6 +74,38 @@ public class CompanyServiceTest {
     }
 
     /**
+     * find the existing company test
+     */
+    @Test
+    public void existingCompany_whenTryToFind_returnCompany() {
+        Company findedCompany;
+
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+
+            findedCompany = companyService.findCompanyById(testCompany.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(testCompany, findedCompany);
+    }
+
+    /**
+     * find the non-existent company test
+     */
+    @Test
+    public void nonexistentCompany_whenTryToFind_thenAssertRuntimeException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            companyService.findCompanyById(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company with this id not found");
+    }
+
+    /**
      * save the valid company test
      */
     @Test
@@ -156,7 +188,7 @@ public class CompanyServiceTest {
     }
 
     /**
-     * delete existing company test
+     * delete the existing company test
      */
     @Test
     public void existingCompany_whenDeleted_thenCannotBeFoundById() {
@@ -172,10 +204,10 @@ public class CompanyServiceTest {
     }
 
     /**
-     * delete non-existent company test
+     * delete the non-existent company test
      */
     @Test
-    public void nonexistentCompany_whenTryToDelete_thenAssertException() {
+    public void nonexistentCompany_whenTryToDelete_thenAssertRuntimeException() {
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             companyService.delete(UUID.randomUUID());
         });
