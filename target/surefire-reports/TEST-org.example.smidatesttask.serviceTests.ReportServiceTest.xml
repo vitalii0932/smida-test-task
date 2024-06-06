@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="4.38" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.329" tests="9" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -62,7 +62,13 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="reportDetails_whenUpdated_thenCanBeFoundById" classname="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="0.195"/>
-  <testcase name="reportDetails_whenDeleted_thenCannotBeFoundById" classname="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="0.066"/>
-  <testcase name="reportDetails_whenSaved_thenCanBeFoundById" classname="org.example.smidatesttask.repositoryTests.ReportDetailsRepositoryTest" time="0.015"/>
+  <testcase name="invalidReportWithNonExistingCompany_whenTryToSave_thenAssertRuntimeException" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.01"/>
+  <testcase name="invalidReportWithNonExistingCompany_whenTryToUpdate_thenAssertRuntimeException" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.038"/>
+  <testcase name="invalidReportWithNullCompany_whenTryToSave_thenAssertRuntimeException" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.05"/>
+  <testcase name="validReport_whenSaved_thenCanBeFoundById" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.047"/>
+  <testcase name="getAllByCompany_thenListSizeMustBeNotEmptyAndCompanyMustBeCorrect" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.022"/>
+  <testcase name="validReport_whenUpdated_thenCanBeFoundById" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.047"/>
+  <testcase name="existingReport_whenDeleted_thenCannotBeFoundById" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.028"/>
+  <testcase name="invalidReportWithNullCompany_whenTryToUpdate_thenAssertRuntimeException" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.052"/>
+  <testcase name="nonexistentReport_whenTryToDelete_thenAssertRuntimeException" classname="org.example.smidatesttask.serviceTests.ReportServiceTest" time="0.008"/>
 </testsuite>

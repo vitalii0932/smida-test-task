@@ -215,4 +215,34 @@ public class ReportServiceTest {
 
         assertEquals(actualMessage, "Company with this id not found");
     }
+
+    /**
+     * delete the existing report test
+     */
+    @Test
+    public void existingReport_whenDeleted_thenCannotBeFoundById() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        reportService.delete(testReport.getId());
+
+        assertFalse(reportRepository.existsById(testReport.getId()));
+    }
+
+    /**
+     * delete the non-existent report test
+     */
+    @Test
+    public void nonexistentReport_whenTryToDelete_thenAssertRuntimeException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportService.delete(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report with this id not found");
+    }
 }

@@ -183,7 +183,7 @@ public class CompanyServiceTest {
 
         String actualMessage = exception.getViolations().toString();
 
-        assertTrue(actualMessage.contains("property=name"));
+        assertTrue(actualMessage.contains("property=address"));
         assertTrue(actualMessage.contains("message=Company address is required"));
     }
 
