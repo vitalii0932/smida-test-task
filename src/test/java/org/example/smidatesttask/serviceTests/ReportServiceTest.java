@@ -100,6 +100,93 @@ public class ReportServiceTest {
     }
 
     /**
+     * findReportById function test
+     */
+    @Test
+    public void findReportById_thenGetReport() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        Report reportFromDb;
+        try {
+            reportFromDb = reportService.findReportById(testReport.getId());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        assertNotNull(reportFromDb);
+        assertEquals(testReport, reportFromDb);
+    }
+
+    /**
+     * findReportDTOById function test
+     */
+    @Test
+    public void findReportDTOById_thenGetReport() {
+        try {
+            testReport = reportService.save(testReportDTO);
+
+            testReportDTO.setId(testReport.getId());
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        ReportDTO reportDTOFromDb;
+        try {
+            reportDTOFromDb = reportService.findReportDTOById(testReport.getId());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        assertNotNull(reportDTOFromDb);
+        assertEquals(testReportDTO, reportDTOFromDb);
+    }
+
+    /**
+     * create a new report test
+     */
+    @Test
+    public void createReport_whenCreateOrUpdate_createANewReport() {
+        try {
+            testReport = reportService.createOrUpdateReport(testReportDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Report savedReport = reportRepository.findById(testReport.getId()).orElse(null);
+
+        assertNotNull(savedReport);
+        assertEquals(testReport, savedReport);
+    }
+
+    /**
+     * update an existing report test
+     */
+    @Test
+    public void updateReport_whenCreateOrUpdate_updateReport() {
+        try {
+            testReport = reportService.save(testReportDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testReportDTO.setId(testReport.getId());
+        testReportDTO.setTotalRevenue(BigDecimal.TEN);
+
+        Report updatedReport;
+        try {
+            updatedReport = reportService.createOrUpdateReport(testReportDTO);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        assertEquals(updatedReport.getTotalRevenue(), testReportDTO.getTotalRevenue());
+    }
+
+    /**
      * save the valid report test
      */
     @Test
@@ -230,6 +317,7 @@ public class ReportServiceTest {
         try {
             reportService.delete(testReport.getId());
         } catch (Exception e) {
+            throw new RuntimeException();
         }
 
         assertFalse(reportRepository.existsById(testReport.getId()));
