@@ -52,7 +52,8 @@ public class ReportService {
      * @return a report
      * @throws RuntimeException if report not found
      */
-    private Report findReportById(UUID id) throws RuntimeException {
+    @Transactional(readOnly = true)
+    public Report findReportById(UUID id) throws RuntimeException {
         return reportRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Report with this id not found")
         );

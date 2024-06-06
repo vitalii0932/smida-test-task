@@ -9,8 +9,8 @@
 </head>
 <body class="table_body">
 <button onclick="logout()" class="logout_button">Logout</button>
-<p><a th:href="@{/api/v1/companies}"><span th:text="${companyName}"></span></a> reports in DB:</p>
-<a href="#" id="new">Create New</a>
+<p><a th:href="@{/api/v1/companies}"><span th:text="${company.getName()}"></span></a> reports in DB:</p>
+<a th:href="@{'/api/v1/reports/create/' + ${company.getId()}}" id="new">Create New</a>
 <table>
     <tr>
         <th>id</th>
@@ -29,8 +29,8 @@
         <td th:text="${report.getTotalRevenue()}"></td>
         <td th:text="${report.getNetProfit()}"></td>
         <td><a th:href="@{'/api/v1/reports_details/' + ${report.getId()}}">details</a></td>
-        <td><a th:href="@{'/api/v1/reports_details/update/' + ${report.getId()}}">update</a></td>
-        <td><a th:href="@{'/api/v1/reports_details/delete/' + ${report.getId()}}" id="delete">delete</a></td>
+        <td><a th:href="@{'/api/v1/reports/update/' + ${report.getId()}}">update</a></td>
+        <td><a th:href="@{'/api/v1/reports/delete/' + ${report.getId()}}" id="delete">delete</a></td>
     </tr>
 </table>
 </body>

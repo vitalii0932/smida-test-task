@@ -4,15 +4,15 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Report details</title>
-		<link rel="stylesheet" href="/static/style.css" />
+		<link rel="stylesheet" th:href="@{/style.css}"/>
 	</head>
 	<body class="table_body">
 		<button onclick="logout()" class="logout_button">Logout</button>
 		<p>
-			<a href="companies.html">{Company name}</a>
-			<a href="reports.html">{Report date}</a> details in DB:
+			<a th:href="@{/api/v1/companies}" th:text="${company.getName()}"></a>
+			<a th:href="@{'/api/v1/reports/' + ${company.getId()}}" th:text="${report.getReportDate()}"></a> details in DB:
 		</p>
-		<a href="create_or_update_report_details.html" id="new">Create New</a>
+		<a th:href="@{'/api/v1/reports_details/create/' + ${report.getId()}}" id="new">Create New</a>
 		<table>
 			<tr>
 				<th>report</th>
@@ -22,11 +22,11 @@
 				<th>delete the report details</th>
 			</tr>
 			<tr>
-				<td>Data 1</td>
-				<td>Data 2</td>
-				<td>Data 3</td>
-				<td><a href="create_or_update_report_details.html">update</a></td>
-				<td><a href="#" id="delete">delete</a></td>
+				<td th:text="${reportDetails.getReportId()}"></td>
+				<td th:text="${reportDetails.getFinancialData()}"></td>
+				<td th:text="${reportDetails.getComments()}"></td>
+				<td><a th:href="@{'/api/v1/reports_details/update/' + ${report.getId()}}">update</a></td>
+				<td><a th:href="@{'/api/v1/reports_details/delete/' + ${report.getId()}}" id="delete">delete</a></td>
 			</tr>
 		</table>
 	</body>

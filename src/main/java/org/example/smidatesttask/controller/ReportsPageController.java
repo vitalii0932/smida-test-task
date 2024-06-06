@@ -32,7 +32,7 @@ public class ReportsPageController {
     @GetMapping("/{companyId}")
     public String loadReportsPage(Model model, @PathVariable("companyId") UUID companyId) {
         List<Report> reports = reportService.getAllReportByCompany(companyId);
-        model.addAttribute("companyName", reports.get(0).getCompany().getName());
+        model.addAttribute("company", reports.get(0).getCompany());
         model.addAttribute("reports", reports);
         return "reports";
     }
