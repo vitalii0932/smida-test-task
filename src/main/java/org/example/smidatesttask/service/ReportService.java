@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,6 +73,7 @@ public class ReportService {
         Report reportToSave = reportMapper.toReport(reportDTO);
         Company reportCompany = companyService.findCompanyById(reportDTO.getCompanyId());
         reportToSave.setCompany(reportCompany);
+        reportToSave.setReportDate(Timestamp.from(Instant.now()));
 
         validationService.isValid(reportToSave);
 
