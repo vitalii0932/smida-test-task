@@ -48,6 +48,12 @@ public class CompaniesPageController {
         return "create_or_update_company";
     }
 
+    /**
+     * handles the GET request for the update company page
+     *
+     * @param model - the model object used to pass data to the view
+     * @return the view name for the update company page
+     */
     @GetMapping("/update/{companyId}")
     public String loadUpdateCompanyPage(Model model, @PathVariable("companyId") UUID companyId) {
         model.addAttribute("company", companyMapper.toCompanyDTO(

@@ -46,6 +46,23 @@ public class ReportService {
     }
 
     /**
+     * find report dto by its id
+     *
+     * @param id - report dto id
+     * @return a report dto
+     * @throws RuntimeException if report not found
+     */
+    @Transactional
+    public ReportDTO findReportDTOById(UUID id) throws RuntimeException {
+        ReportDTO reportDTO = new ReportDTO();
+        Report report = findReportById(id);
+        reportDTO = reportMapper.toReportDTO(report);
+        reportDTO.setCompanyId(report.getCompany().getId());
+
+        return reportDTO;
+    }
+
+    /**
      * find report by its id
      *
      * @param id - report id

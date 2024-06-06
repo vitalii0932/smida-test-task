@@ -15,7 +15,7 @@
         <span th:unless="${company.getId()} != null">Create</span>
         Company
     </h1>
-    <form th:object="${company}" th:action="@{/api/v1/companies/create_company}" method="post">
+    <form th:object="${company}" th:action="@{/api/v1/companies/submit_company}" method="post">
         <p id="error_message"></p>
 
         <label for="id">Id:</label>

@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>
-        <span th:if="${company.id != null}">Update</span>
-        <span th:unless="${company.id != null}">Create</span>
-        Company
-    </title>
+    <title>Create or Update Company</title>
     <link rel="stylesheet" th:href="@{/style.css}"/>
 </head>
 <body class="form_body">
@@ -19,7 +15,7 @@
         <span th:unless="${company.getId()} != null">Create</span>
         Company
     </h1>
-    <form th:object="${company}" th:action="@{/api/v1/companies/create_company}" method="post">
+    <form th:object="${company}" th:action="@{/api/v1/companies/submit_company}" method="post">
         <p id="error_message"></p>
 
         <label for="id">Id:</label>
