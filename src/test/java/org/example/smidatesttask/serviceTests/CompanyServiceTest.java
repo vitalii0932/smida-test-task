@@ -146,6 +146,48 @@ public class CompanyServiceTest {
     }
 
     /**
+     * create a new company test
+     */
+    @Test
+    public void createCompany_whenCreateOrUpdate_createANewCompany() {
+        try {
+            testCompany = companyService.createOrUpdateCompany(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Company savedCompany = companyRepository.findById(testCompany.getId()).orElse(null);
+
+        assertNotNull(savedCompany);
+        assertEquals(testCompany, savedCompany);
+    }
+
+    /**
+     * update an existing company test
+     */
+    @Test
+    public void updateCompany_whenCreateOrUpdate_updateCompany() {
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testCompanyDTO.setId(testCompany.getId());
+        testCompanyDTO.setName("new test company name");
+
+        Company updatedCompany;
+        try {
+            updatedCompany = companyService.createOrUpdateCompany(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(updatedCompany.getName(), testCompanyDTO.getName());
+    }
+
+
+    /**
      * save the valid company test
      */
     @Test
