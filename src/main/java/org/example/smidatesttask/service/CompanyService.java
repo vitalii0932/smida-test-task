@@ -75,7 +75,10 @@ public class CompanyService {
      * update company in db function
      *
      * @param companyDTO - company data from user
-     * @return the saved company
+     * @return the updated company
+     * @throws RuntimeException if company not found
+     * @throws IllegalAccessException if class arguments not correct
+     * @throws ValidationException if company not correct
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
