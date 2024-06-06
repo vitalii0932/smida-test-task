@@ -35,8 +35,6 @@ public class JsonServiceTest {
             throw new RuntimeException();
         }
 
-        System.out.println(resultJson);
-
         assertEquals(resultJson, "{\"test\":\"json\"}");
     }
 
