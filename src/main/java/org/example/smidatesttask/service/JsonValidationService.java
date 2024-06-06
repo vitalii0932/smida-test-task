@@ -17,7 +17,7 @@ public class JsonValidationService {
      * @param str - str from user
      * @throws RuntimeException if str isn't json
      */
-    public static void isValidJSON(String str) throws RuntimeException {
+    public void isValidJSON(String str) throws RuntimeException {
         try {
             objectMapper.readTree(str);
         } catch (Exception e) {
