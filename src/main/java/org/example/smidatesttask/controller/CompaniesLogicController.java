@@ -41,8 +41,6 @@ public class CompaniesLogicController {
     public String deleteCategory(@PathVariable("companyId") UUID companyId, RedirectAttributes redirectAttributes) {
         try {
             companyService.delete(companyId);
-        } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("error", "First you need to delete reports");
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", e.getMessage());
