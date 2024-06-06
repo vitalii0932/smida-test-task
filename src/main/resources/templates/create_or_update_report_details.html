@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Create Report Details</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body class="form_body">
+		<div class="form_div">
+			<h1>
+				<a href="reports.html" class="go_back">Go back</a> or Create/Update
+				Report Details
+			</h1>
+			<form>
+				<p id="error_message"></p>
+
+				<label for="reportId">Report Id:</label>
+				<input
+					type="text"
+					id="reportId"
+					name="reportId"
+					style="pointer-events: none"
+				/>
+
+				<label for="financialData">Financial Data:</label>
+				<input type="text" id="financialData" name="financialData" required />
+
+				<label for="financialData">Financial Data (JSON):</label>
+				<textarea id="financialData" name="financialData" required></textarea>
+
+				<label for="comments">Comments:</label>
+				<input type="text" id="comments" name="comments" required />
+
+				<input type="submit" value="Create" />
+			</form>
+		</div>
+	</body>
+</html>

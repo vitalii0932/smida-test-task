@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Create Report</title>
+		<link rel="stylesheet" href="/static/style.css" />
+	</head>
+	<body class="form_body">
+		<div class="form_div">
+			<h1>
+				<a href="reports.html" class="go_back">Go back</a> or Create/Update
+				Report
+			</h1>
+			<form>
+				<p id="error_message"></p>
+
+				<label for="id">Id:</label>
+				<input type="text" id="id" name="id" style="pointer-events: none" />
+
+				<label for="company">Company:</label>
+				<select id="company" name="company" required>
+					<option value="1">Option 1</option>
+					<option value="2">Option 2</option>
+					<option value="3">Option 3</option>
+				</select>
+
+				<label for="totalRevenue">Total Revenue:</label>
+				<input type="number" id="totalRevenue" name="totalRevenue" required />
+
+				<label for="netProfit">Net Profit:</label>
+				<input type="number" id="netProfit" name="netProfit" required />
+
+				<input type="submit" value="Create" />
+			</form>
+		</div>
+	</body>
+</html>
