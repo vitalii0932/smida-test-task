@@ -115,4 +115,17 @@ public class ReportService {
 
         return reportRepository.save(reportToUpdate);
     }
+
+    /**
+     * delete entity from db function
+     *
+     * @param id - entity id
+     * @throws RuntimeException if report not found
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public void delete(UUID id) throws RuntimeException {
+        findReportById(id);
+        reportRepository.deleteById(id);
+    }
 }
