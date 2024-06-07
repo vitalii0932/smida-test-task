@@ -38,6 +38,9 @@ public class CompaniesPageControllerTest {
 
     private Company testCompany;
 
+    /**
+     * set up the test company
+     */
     @Before
     public void setUp() {
         testCompany = new Company();
@@ -50,6 +53,9 @@ public class CompaniesPageControllerTest {
         testCompany = companyRepository.save(testCompany);
     }
 
+    /**
+     * tear down the test company
+     */
     @After
     public void tearDown() {
         if (testCompany != null && testCompany.getId() != null && companyRepository.existsById(testCompany.getId())) {
