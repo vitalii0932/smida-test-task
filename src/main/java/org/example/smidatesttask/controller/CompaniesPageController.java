@@ -21,7 +21,6 @@ import java.util.UUID;
 public class CompaniesPageController {
 
     private final CompanyService companyService;
-    private final CompanyMapper companyMapper;
 
     /**
      * handles the GET request for the companies page
