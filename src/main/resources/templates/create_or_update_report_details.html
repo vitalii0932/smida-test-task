@@ -11,8 +11,8 @@
 <div class="form_div">
     <h1>
         <a th:href="@{'/api/v1/reports_details/' + ${reportDetails.reportId}}" class="go_back">Go back</a> or
-        <span th:if="${reportDetails.reportId} != null">Update</span>
-        <span th:unless="${reportDetails.reportId} != null">Create</span>
+        <span th:if="${reportDetails.financialData} != null">Update</span>
+        <span th:unless="${reportDetails.financialData} != null">Create</span>
         Report
     </h1>
     <form th:object="${reportDetails}" th:action="@{/api/v1/reports_details/submit_report_details}" method="post">

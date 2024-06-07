@@ -81,7 +81,7 @@ public class CompaniesPageControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testCreateCompanyPage() throws Exception {
+    public void testLoadCreateCompanyPage() throws Exception {
         mockMvc.perform(get("/api/v1/companies/create"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -95,7 +95,7 @@ public class CompaniesPageControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testUpdateCompanyPage() throws Exception {
+    public void testLoadUpdateCompanyPage() throws Exception {
         mockMvc.perform(get("/api/v1/companies/update/" + testCompany.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
