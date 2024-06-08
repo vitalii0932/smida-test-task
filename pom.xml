@@ -92,7 +92,7 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
-        <!-- security with jwt
+        <!-- security with jwt -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -118,7 +118,7 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
             <version>5.0.8.RELEASE</version>
-        </dependency>-->
+        </dependency>
 
         <!-- tests with JUnit Jupiter API and Engine -->
         <dependency>
