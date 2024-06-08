@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-report-table
+      author: Vitalii Halaiko
+      changes:
+        - createTable:
+            tableName: report
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: net_profit
+                  type: decimal
+              - column:
+                  name: report_date
+                  type: timestamp
+              - column:
+                  name: total_revenue
+                  type: decimal
+              - column:
+                  name: company_id
+                  type: UUID
+                  constraints:
+                    foreignKeyName: fk_report_company

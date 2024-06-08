@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * simple user type data class
  */
-@Entity(name = "users")
+@Entity(name = "user")
 @Data
 @Builder
 @NoArgsConstructor

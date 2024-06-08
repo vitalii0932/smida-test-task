@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-company-table
+      author: Vitalii Halaiko
+      changes:
+        - createTable:
+            tableName: company
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: registration_number
+                  type: varchar(255)
