@@ -77,7 +77,7 @@ public class CompaniesLogicControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testSubmitNewValidCompany_thenSave_thenAssertRedirectToCompanies() throws Exception {
+    public void testSubmitValidCompany_thenUpdate_thenAssertRedirectToCompanies() throws Exception {
         testCompany = companyRepository.save(testCompany);
 
         testCompany.setRegistrationNumber("new number");
@@ -103,7 +103,7 @@ public class CompaniesLogicControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testSubmitNewInValidCompany_thenSave_thenAssertRedirectToUpdateAndErrorMessage() throws Exception {
+    public void testSubmitInvalidCompany_thenTryToUpdate_thenAssertRedirectToUpdateAndErrorMessage() throws Exception {
         testCompany = companyRepository.save(testCompany);
 
         testCompany.setRegistrationNumber("");
@@ -151,7 +151,7 @@ public class CompaniesLogicControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testDeleteNonExistedCompany_thenDelete_thenAssertRedirectToCompaniesAndErrorMessage() throws Exception {
+    public void testDeleteNonExistedCompany_thenTryToDelete_thenAssertRedirectToCompaniesAndErrorMessage() throws Exception {
         ResultActions resultActions = mockMvc.perform(get("/api/v1/companies/delete/" + UUID.randomUUID()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
