@@ -2,7 +2,6 @@ package org.example.smidatesttask.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.CompanyDTO;
-import org.example.smidatesttask.mapper.CompanyMapper;
 import org.example.smidatesttask.service.CompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

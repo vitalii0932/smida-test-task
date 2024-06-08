@@ -62,6 +62,6 @@ public class ReportDetailsLogicController {
             }
         }
 
-        return "redirect:/api/v1/report_details/" + reportDetailsId;
+        return "redirect:/api/v1/reports_details/" + reportDetailsId;
     }
 }

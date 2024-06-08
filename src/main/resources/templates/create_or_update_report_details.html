@@ -22,7 +22,8 @@
         <input type="text" id="reportId" name="reportId" style="pointer-events: none" th:field="*{reportId}"/>
 
         <label for="financialData">Financial Data (JSON):</label>
-        <textarea id="financialData" name="financialData" style="height: 300px" required th:field="*{financialData}"></textarea>
+        <textarea id="financialData" name="financialData" style="height: 300px" required
+                  th:field="*{financialData}"></textarea>
 
         <label for="comments">Comments:</label>
         <textarea id="comments" name="comments" style="height: 100px" required th:field="*{comments}"></textarea>
@@ -30,5 +31,8 @@
         <input type="submit" value="Create"/>
     </form>
 </div>
+
+<script th:src="@{/js/auth.js}"></script>
+
 </body>
 </html>
