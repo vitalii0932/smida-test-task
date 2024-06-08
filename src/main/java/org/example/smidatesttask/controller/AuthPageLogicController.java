@@ -2,21 +2,20 @@ package org.example.smidatesttask.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.AuthenticationRequest;
-import org.example.smidatesttask.dto.AuthenticationResponse;
 import org.example.smidatesttask.dto.RegisterRequest;
 import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.service.AuthenticationService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller for auth logic
  */
-@Controller
+@RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthPageLogicController {

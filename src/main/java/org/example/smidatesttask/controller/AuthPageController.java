@@ -2,7 +2,6 @@ package org.example.smidatesttask.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.AuthenticationRequest;
-import org.example.smidatesttask.dto.AuthenticationResponse;
 import org.example.smidatesttask.dto.RegisterRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
