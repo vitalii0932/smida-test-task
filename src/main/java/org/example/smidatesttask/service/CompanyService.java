@@ -5,7 +5,10 @@ import org.example.smidatesttask.dto.CompanyDTO;
 import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.mapper.CompanyMapper;
 import org.example.smidatesttask.model.Company;
+import org.example.smidatesttask.model.Report;
 import org.example.smidatesttask.repository.CompanyRepository;
+import org.example.smidatesttask.repository.ReportDetailsRepository;
+import org.example.smidatesttask.repository.ReportRepository;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -26,6 +29,8 @@ public class CompanyService {
 
     private final ValidationService validationService;
     private final CompanyRepository companyRepository;
+    private final ReportRepository reportRepository;
+    private final ReportDetailsRepository reportDetailsRepository;
     private final CompanyMapper companyMapper;
 
     /**
@@ -56,10 +61,40 @@ public class CompanyService {
     }
 
     /**
+     * find company dto by its id
+     *
+     * @param id - company id
+     * @return a company
+     * @throws RuntimeException if company was not found
+     */
+    @Transactional(readOnly = true)
+    public CompanyDTO findCompanyDTOById(UUID id) throws RuntimeException {
+        return companyMapper.toCompanyDTO(findCompanyById(id));
+    }
+
+    /**
+     * create or update company function
+     *
+     * @param companyDTO - company data from user
+     * @return the saved company
+     * @throws Exception if something was wrong
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public Company createOrUpdateCompany(CompanyDTO companyDTO) throws Exception {
+        if (companyDTO.getId() == null) {
+            return save(companyDTO);
+        } else {
+            return update(companyDTO);
+        }
+    }
+
+    /**
      * save company in db function
      *
      * @param companyDTO - company data from user
      * @return the saved company
+     * @throws ValidationException if company is not valid
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
@@ -119,8 +154,19 @@ public class CompanyService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public void delete(UUID id) throws RuntimeException {
-        findCompanyById(id);
+    public void delete(UUID id) throws Exception {
+        Company company = findCompanyById(id);
+        List<Report> reportsToDelete = reportRepository.getAllByCompany(company);
+
+        for (var report : reportsToDelete) {
+            try {
+                reportDetailsRepository.deleteById(report.getId());
+                reportRepository.delete(report);
+            } catch (Exception e) {
+                // skip
+            }
+        }
+
         companyRepository.deleteById(id);
     }
 }

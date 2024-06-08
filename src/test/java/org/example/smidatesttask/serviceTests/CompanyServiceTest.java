@@ -67,6 +67,12 @@ public class CompanyServiceTest {
      */
     @Test
     public void getAll_thenListSizeMustBeNotEmpty() {
+        try {
+            companyService.save(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         List<Company> companies = companyService.getAll();
 
         assertNotNull(companies);
@@ -104,6 +110,82 @@ public class CompanyServiceTest {
 
         assertEquals(actualMessage, "Company with this id not found");
     }
+
+    /**
+     * find the existing company dto test
+     */
+    @Test
+    public void existingCompany_whenTtyToFindDTO_returnCompanyDTO() {
+        CompanyDTO findedCompanyDTO;
+
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+
+            testCompanyDTO.setId(testCompany.getId());
+
+            findedCompanyDTO = companyService.findCompanyDTOById(testCompany.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(testCompanyDTO, findedCompanyDTO);
+    }
+
+    /**
+     * find the non-existent company dto test
+     */
+    @Test
+    public void nonexistentCompany_whenTryToFindDTO_thenAssertRuntimeException() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            companyService.findCompanyDTOById(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Company with this id not found");
+    }
+
+    /**
+     * create a new company test
+     */
+    @Test
+    public void createCompany_whenCreateOrUpdate_createANewCompany() {
+        try {
+            testCompany = companyService.createOrUpdateCompany(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Company savedCompany = companyRepository.findById(testCompany.getId()).orElse(null);
+
+        assertNotNull(savedCompany);
+        assertEquals(testCompany, savedCompany);
+    }
+
+    /**
+     * update an existing company test
+     */
+    @Test
+    public void updateCompany_whenCreateOrUpdate_updateCompany() {
+        try {
+            testCompany = companyService.save(testCompanyDTO);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        testCompanyDTO.setId(testCompany.getId());
+        testCompanyDTO.setName("new test company name");
+
+        Company updatedCompany;
+        try {
+            updatedCompany = companyService.createOrUpdateCompany(testCompanyDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(updatedCompany.getName(), testCompanyDTO.getName());
+    }
+
 
     /**
      * save the valid company test
@@ -198,7 +280,11 @@ public class CompanyServiceTest {
             throw new RuntimeException(e);
         }
 
-        companyService.delete(testCompany.getId());
+        try {
+            companyService.delete(testCompany.getId());
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
 
         assertFalse(companyRepository.existsById(testCompany.getId()));
     }

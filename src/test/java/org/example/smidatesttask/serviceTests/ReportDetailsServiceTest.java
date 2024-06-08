@@ -1,7 +1,6 @@
 package org.example.smidatesttask.serviceTests;
 
 import org.example.smidatesttask.dto.ReportDetailsDTO;
-import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.mapper.ReportDetailsMapper;
 import org.example.smidatesttask.model.Company;
 import org.example.smidatesttask.model.Report;
@@ -113,6 +112,8 @@ public class ReportDetailsServiceTest {
             throw new RuntimeException();
         }
 
+        testReportDetails = reportDetailsService.getReportDetails(testReportDetails.getReportId());
+
         assertNotNull(testReportDetails);
         assertEquals(testReportDetails.getFinancialData(), testReportDetailsDTO.getFinancialData());
         assertEquals(testReportDetails.getComments(), testReportDetailsDTO.getComments());
@@ -130,6 +131,101 @@ public class ReportDetailsServiceTest {
         String actualMessage = exception.getMessage();
 
         assertEquals(actualMessage, "Report details with this id not found");
+    }
+
+    /**
+     * get report details DTO with correct report id
+     */
+    @Test
+    public void correctReportDetails_getReportDetailsDTO_thenReturnCorrectReportDetails() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        testReportDetailsDTO = reportDetailsService.getReportDetailsDTO(testReportDetails.getReportId());
+
+        assertNotNull(testReportDetailsDTO);
+        assertEquals(testReportDetails.getFinancialData(), testReportDetailsDTO.getFinancialData());
+        assertEquals(testReportDetails.getComments(), testReportDetailsDTO.getComments());
+    }
+
+    /**
+     * get report details DTO with incorrect report id
+     */
+    @Test
+    public void incorrectReportDetails_getReportDetailsDTO_thenReturnCorrectReportDetails() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            reportDetailsService.getReportDetailsDTO(UUID.randomUUID());
+        });
+
+        String actualMessage = exception.getMessage();
+
+        assertEquals(actualMessage, "Report details with this id not found");
+    }
+
+    /**
+     * IsReportDetailsExistDb function test with existing report
+     */
+    @Test
+    public void reportExistInDb_whenIsReportDetailsExistDb_thenReturnTrue() {
+        try {
+            testReportDetails = reportDetailsService.save(testReportDetailsDTO);
+        } catch (RuntimeException e) {
+            throw new RuntimeException();
+        }
+
+        assertTrue(reportDetailsService.isReportDetailsExistDb(testReportDetails.getReportId()));
+    }
+
+    /**
+     * IsReportDetailsExistDb function test with non existed report
+     */
+    @Test
+    public void reportNotExistInDb_whenIsReportDetailsExistDb_thenReturnFalse() {
+        assertFalse(reportDetailsService.isReportDetailsExistDb(UUID.randomUUID()));
+    }
+
+    /**
+     * create a new report details test
+     */
+    @Test
+    public void createReportDetails_whenCreateOrUpdate_createANewReportDetails() {
+        try {
+            testReportDetails = reportDetailsService.createOrUpdateReportDetails(testReportDetailsDTO);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        ReportDetails savedReportDetails = reportDetailsRepository.findById(testReportDetails.getReportId()).orElse(null);
+
+        assertNotNull(savedReportDetails);
+        assertEquals(testReportDetails, savedReportDetails);
+    }
+
+    /**
+     * update an existing report details test
+     */
+    @Test
+    public void updateReportDetails_whenCreateOrUpdate_updateReportDetails() {
+        try {
+            testReportDetails = reportDetailsService.createOrUpdateReportDetails(testReportDetailsDTO);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        testReportDetailsDTO.setReportId(testReportDetails.getReportId());
+        testReportDetailsDTO.setComments("new comment");
+
+        ReportDetails updatedReportDetails;
+        try {
+            updatedReportDetails = reportDetailsService.update(testReportDetailsDTO);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        assertEquals(updatedReportDetails, reportDetailsMapper.toReportDetails(testReportDetailsDTO));
     }
 
     /**
@@ -284,7 +380,10 @@ public class ReportDetailsServiceTest {
             throw new RuntimeException(e);
         }
 
-        reportDetailsService.delete(testReportDetails.getReportId());
+        try {
+            reportDetailsService.delete(testReportDetails.getReportId());
+        } catch (Exception e) {
+        }
 
         assertFalse(reportDetailsRepository.existsById(testReportDetails.getReportId()));
     }

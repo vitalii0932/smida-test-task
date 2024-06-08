@@ -41,6 +41,46 @@ public class ReportDetailsService {
     }
 
     /**
+     * get report details dto function
+     *
+     * @param reportId - report id
+     * @return the report dto details
+     * @throws RuntimeException if report was not found
+     */
+    @Transactional(readOnly = true)
+    public ReportDetailsDTO getReportDetailsDTO(UUID reportId) throws RuntimeException {
+        return reportDetailsMapper.toReportDetailsDTO(getReportDetails(reportId));
+    }
+
+    /**
+     * check is report details exist in db
+     *
+     * @param reportId - report id
+     * @return true is exist and false if doesn't exist
+     */
+    @Transactional(readOnly = true)
+    public boolean isReportDetailsExistDb(UUID reportId) {
+        return reportDetailsRepository.existsById(reportId);
+    }
+
+    /**
+     * create or update report details function
+     *
+     * @param reportDetailsDTO  - report details data from user
+     * @return a saved report details
+     * @throws Exception is something was wrong
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 5)
+    public ReportDetails createOrUpdateReportDetails(ReportDetailsDTO reportDetailsDTO) throws Exception {
+        if (!isReportDetailsExistDb(reportDetailsDTO.getReportId())) {
+            return save(reportDetailsDTO);
+        } else {
+            return update(reportDetailsDTO);
+        }
+    }
+
+    /**
      * save report details in db
      *
      * @param reportDetailsDTO - report details data from user
@@ -107,7 +147,7 @@ public class ReportDetailsService {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Retryable(maxAttempts = 5)
-    public void delete(UUID id) throws RuntimeException {
+    public void delete(UUID id) throws Exception {
         reportDetailsRepository.delete(getReportDetails(id));
     }
 }
