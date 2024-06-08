@@ -37,6 +37,8 @@ public class AuthPageLogicController {
         } catch (ValidationException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getViolations());
         } catch (RuntimeException e) {
+            e.printStackTrace();
+            e.fillInStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-user-table
+      id: create-users-table
       author: Vitalii Halaiko
       changes:
         - createTable:
-            tableName: user
+            tableName: users
             columns:
               - column:
                   name: id
