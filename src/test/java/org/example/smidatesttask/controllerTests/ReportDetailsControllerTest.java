@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -147,4 +148,5 @@ public class ReportDetailsControllerTest {
                 .andExpect(content().string(containsString("<span>Update</span>")))
                 .andExpect(content().string(Matchers.not(containsString("<span>Create</span>"))));
     }
+
 }
