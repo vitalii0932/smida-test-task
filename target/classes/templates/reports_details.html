@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Report details</title>
-		<link rel="stylesheet" th:href="@{/style.css}"/>
-	</head>
-	<body class="table_body">
-		<button onclick="logout()" class="logout_button">Logout</button>
-		<p>
-			<a th:href="@{/api/v1/companies}" th:text="${company.getName()}"></a>
-			<a th:href="@{'/api/v1/reports/' + ${company.getId()}}" th:text="${report.getReportDate()}"></a> details in DB:
-		</p>
-		<a th:href="@{'/api/v1/reports_details/create/' + ${report.getId()}}" id="new">Create New</a>
-		<p th:if="${error}" id="error_message" th:text="${error}"></p>
-		<table>
-			<tr>
-				<th>report</th>
-				<th>financial data</th>
-				<th>comments</th>
-				<th>update the report details data</th>
-				<th>delete the report details</th>
-			</tr>
-			<tr th:if="${reportDetails != null}">
-				<td th:text="${reportDetails.getReportId()}"></td>
-				<td th:text="${reportDetails.getFinancialData()}"></td>
-				<td th:text="${reportDetails.getComments()}"></td>
-				<td><a th:href="@{'/api/v1/reports_details/update/' + ${report.getId()}}">update</a></td>
-				<td><a th:href="@{'/api/v1/reports_details/delete/' + ${report.getId()}}" id="delete">delete</a></td>
-			</tr>
-		</table>
-	</body>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Report details</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body class="table_body">
+<button onclick="logout()" class="logout_button">Logout</button>
+<p>
+    <a th:href="@{/api/v1/companies}" th:text="${company.getName()}"></a>
+    <a th:href="@{'/api/v1/reports/' + ${company.getId()}}" th:text="${report.getReportDate()}"></a> details in DB:
+</p>
+<a th:href="@{'/api/v1/reports_details/create/' + ${report.getId()}}" id="new">Create New</a>
+<p th:if="${error}" id="error_message" th:text="${error}"></p>
+<table>
+    <tr>
+        <th>report</th>
+        <th>financial data</th>
+        <th>comments</th>
+        <th>update the report details data</th>
+        <th>delete the report details</th>
+    </tr>
+    <tr th:if="${reportDetails != null}">
+        <td th:text="${reportDetails.getReportId()}"></td>
+        <td th:text="${reportDetails.getFinancialData()}"></td>
+        <td th:text="${reportDetails.getComments()}"></td>
+        <td><a th:href="@{'/api/v1/reports_details/update/' + ${report.getId()}}">update</a></td>
+        <td><a th:href="@{'/api/v1/reports_details/delete/' + ${report.getId()}}" id="delete">delete</a></td>
+    </tr>
+</table>
+
+<script th:src="@{/js/auth.js}"></script>
+
+</body>
 </html>
