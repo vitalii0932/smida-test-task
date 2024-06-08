@@ -3,6 +3,7 @@ package org.example.smidatesttask.service;
 import org.example.smidatesttask.dto.AuthenticationRequest;
 import org.example.smidatesttask.dto.AuthenticationResponse;
 import org.example.smidatesttask.dto.RegisterRequest;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.model.User;
 import org.example.smidatesttask.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private final ValidationService validationService;
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -29,13 +31,8 @@ public class AuthenticationService {
      * @param request - request from user with register-parameters
      * @return jwt token
      */
-    public AuthenticationResponse register(RegisterRequest request) throws RuntimeException {
-        if (request.getEmail().isBlank()) {
-            throw new RuntimeException("Email is required");
-        }
-        if (request.getPassword().isBlank()) {
-            throw new RuntimeException("Password is required");
-        }
+    public AuthenticationResponse register(RegisterRequest request) throws RuntimeException, ValidationException {
+        validationService.isValid(request);
         if (userRepository.findUserByEmail(request.getEmail()).isPresent()) {
             throw new RuntimeException("This email is taken already");
         }
@@ -43,6 +40,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
+
         userRepository.save(user);
 
         var jwt = jwtService.generateToken(user);
@@ -58,13 +56,8 @@ public class AuthenticationService {
      * @param request - request from user with auth-parameters
      * @return jwt token
      */
-    public AuthenticationResponse authenticate(AuthenticationRequest request) throws RuntimeException {
-        if (request.getEmail().isBlank()) {
-            throw new RuntimeException("Email is required");
-        }
-        if (request.getPassword().isBlank()) {
-            throw new RuntimeException("Password is required");
-        }
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws RuntimeException, ValidationException {
+        validationService.isValid(request);
         var user = userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

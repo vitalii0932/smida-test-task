@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.smidatesttask.dto.AuthenticationRequest;
 import org.example.smidatesttask.dto.AuthenticationResponse;
 import org.example.smidatesttask.dto.RegisterRequest;
+import org.example.smidatesttask.exception.ValidationException;
 import org.example.smidatesttask.service.AuthenticationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +35,10 @@ public class AuthPageLogicController {
     ) {
         try {
             return ResponseEntity.ok(authenticationService.register(request));
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getViolations());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 
@@ -51,8 +54,10 @@ public class AuthPageLogicController {
     ) {
         try {
             return ResponseEntity.ok(authenticationService.authenticate(request));
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getViolations());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 }
