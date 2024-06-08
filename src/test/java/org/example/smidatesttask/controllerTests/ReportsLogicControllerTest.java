@@ -98,7 +98,7 @@ public class ReportsLogicControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testSubmitValidReport_thenSave_thenAssertRedirectToReports() throws Exception {
+    public void testSubmitValidReport_thenUpdate_thenAssertRedirectToReports() throws Exception {
         testReport = reportRepository.save(testReport);
 
         testReportDTO = reportMapper.toReportDTO(testReport);
@@ -114,16 +114,13 @@ public class ReportsLogicControllerTest {
                 .andExpect(redirectedUrl("/api/v1/reports/" + testCompany.getId()));
 
         Long newReportsCount = reportRepository.count();
-        ReportDTO updatedReportDTO = reportMapper.toReportDTO(
-                reportRepository.findById(testReport.getId()).orElse(null)
-        );
-        updatedReportDTO.setCompanyId(testCompany.getId());
+        Report updatedReport = reportRepository.findById(testReport.getId()).orElse(null);
 
-        assertNotNull(updatedReportDTO);
-        assertEquals(testReportDTO.getId(), updatedReportDTO.getId());
-        assertEquals(testReportDTO.getCompanyId(), updatedReportDTO.getCompanyId());
-        assertEquals(testReportDTO.getTotalRevenue().compareTo(updatedReportDTO.getTotalRevenue()), 0);
-        assertEquals(testReportDTO.getNetProfit().compareTo(updatedReportDTO.getNetProfit()), 0);
+        assertNotNull(updatedReport);
+        assertEquals(testReportDTO.getId(), updatedReport.getId());
+        assertEquals(testReportDTO.getCompanyId(), updatedReport.getCompany().getId());
+        assertEquals(testReportDTO.getTotalRevenue().compareTo(updatedReport.getTotalRevenue()), 0);
+        assertEquals(testReportDTO.getNetProfit().compareTo(updatedReport.getNetProfit()), 0);
         assertEquals(reportsCount, newReportsCount);
     }
 
@@ -158,7 +155,7 @@ public class ReportsLogicControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testDeleteExistingReport_whenDelete_theAssertRedirectToReportsAndReportsSizeMinusOne() throws Exception {
+    public void testDeleteExistingReport_whenDelete_thenAssertRedirectToReportsAndReportsSizeMinusOne() throws Exception {
         testReport = reportRepository.save(testReport);
 
         Long reportsCount = reportRepository.count();
@@ -179,7 +176,7 @@ public class ReportsLogicControllerTest {
      * @throws Exception if something wrong
      */
     @Test
-    public void testDeleteNonExistedReport_whenDelete_theAssertRedirectToReportsAndErrorMessage() throws Exception {
+    public void testDeleteNonExistedReport_whenDelete_thenAssertRedirectToReportsAndErrorMessage() throws Exception {
         ResultActions resultActions = mockMvc.perform(get("/api/v1/reports/delete/" + UUID.randomUUID()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/api/v1/companies"));

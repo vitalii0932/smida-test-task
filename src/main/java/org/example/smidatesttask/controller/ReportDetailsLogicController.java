@@ -27,7 +27,7 @@ public class ReportDetailsLogicController {
      * @return a page
      */
     @PostMapping("/submit_report_details")
-    public String submitReportDetails(@ModelAttribute("report") ReportDetailsDTO reportDetailsDTO, RedirectAttributes redirectAttributes) {
+    public String submitReportDetails(@ModelAttribute("reportDetails") ReportDetailsDTO reportDetailsDTO, RedirectAttributes redirectAttributes) {
         try {
             reportDetailsService.createOrUpdateReportDetails(reportDetailsDTO);
 
@@ -56,8 +56,12 @@ public class ReportDetailsLogicController {
             reportDetailsService.delete(reportDetailsId);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
+
+            if (e.getMessage().equals("Report details with this id not found")) {
+                return "redirect:/api/v1/companies";
+            }
         }
 
-        return "redirect:/api/v1/reports_details/" + reportDetailsId;
+        return "redirect:/api/v1/report_details/" + reportDetailsId;
     }
 }
