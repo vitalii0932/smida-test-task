@@ -17,15 +17,15 @@ import java.util.List;
 /**
  * simple user type data class
  */
-@Entity(name = "user")
+@Entity(name = "users")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "user_strategy", allocationSize = 1)
     private Integer id;
     private String email;
     private String password;
