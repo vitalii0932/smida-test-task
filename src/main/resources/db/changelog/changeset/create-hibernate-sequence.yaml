@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-hibernate-sequence
+      author: Vitalii Halaiko
+      changes:
+        - createSequence:
+            sequenceName: hibernate_sequence
+            startValue: 1
+            incrementBy: 1
