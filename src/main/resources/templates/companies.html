@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Companies</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body class="table_body">
+<button onclick="logout()" class="logout_button">Logout</button>
+<p>Companies in DB:</p>
+<a th:href="@{/api/v1/companies/create/}" id="new">Create New</a>
+<p th:if="${error}" id="error_message" th:text="${error}"></p>
+<table>
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>registration number</th>
+        <th>address</th>
+        <th>created at</th>
+        <th>view the report</th>
+        <th>update the company data</th>
+        <th>delete the company</th>
+    </tr>
+    <tr th:each="company : ${companies}">
+        <td th:text="${company.getId()}"></td>
+        <td th:text="${company.getName()}"></td>
+        <td th:text="${company.getRegistrationNumber()}"></td>
+        <td th:text="${company.getAddress()}"></td>
+        <td th:text="${company.getCreatedAt()}"></td>
+        <td><a th:href="@{'/api/v1/reports/' + ${company.getId()}}">report</a></td>
+        <td><a th:href="@{'/api/v1/companies/update/' + ${company.getId()}}">update</a></td>
+        <td><a th:href="@{'/api/v1/companies/delete/' + ${company.getId()}}" id="delete">delete</a></td>
+    </tr>
+</table>
+
+<script th:src="@{/js/auth.js}"></script>
+
+</body>
+</html>

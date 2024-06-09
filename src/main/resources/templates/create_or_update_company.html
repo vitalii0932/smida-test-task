@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Create or Update Company</title>
+    <link rel="stylesheet" th:href="@{/style.css}"/>
+</head>
+<body class="form_body">
+<button onclick="logout()" class="logout_button">Logout</button>
+<div class="form_div">
+    <h1>
+        <a th:href="@{/api/v1/companies}" class="go_back">Go back</a> or
+        <span th:if="${company.getId()} != null">Update</span>
+        <span th:unless="${company.getId()} != null">Create</span>
+        Company
+    </h1>
+    <form th:object="${company}" th:action="@{/api/v1/companies/submit_company}" method="post">
+        <p th:if="${error}" id="error_message" th:text="${error}"></p>
+
+        <label for="id">Id:</label>
+        <input type="text" id="id" name="id" style="pointer-events: none" th:field="*{id}"/>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" th:field="*{name}" required/>
+
+        <label for="registration_number">Registration Number:</label>
+        <input
+                type="text"
+                id="registration_number"
+                name="registration_number"
+                th:field="*{registrationNumber}"
+                required
+        />
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" th:field="*{address}" required/>
+
+        <input type="submit" value="Create"/>
+    </form>
+</div>
+
+<script th:src="@{/js/auth.js}"></script>
+
+</body>
+</html>
